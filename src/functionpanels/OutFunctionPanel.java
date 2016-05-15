@@ -4,11 +4,14 @@
  */
 package functionpanels;
 
+import data.Function;
+import data.Phase;
+
 /**
  *
  * @author Ries
  */
-public class OutFunctionPanel extends javax.swing.JPanel {
+public class OutFunctionPanel extends FunctionPanel {
 
     /**
      * Creates new form RateFunctionPanel
@@ -58,4 +61,31 @@ public class OutFunctionPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox jComboBox_out;
     private javax.swing.JLabel jLabel_out;
     // End of variables declaration//GEN-END:variables
+	@Override
+	public void setPhase(Phase p) {
+		if(p.getFunction().equals(possibleFunction[0])){
+			this.currentphase = p;
+			int param=0;
+			try{
+				param = Integer.parseInt(p.getCommand().substring(3, 1));
+			} catch (Exception e){}
+			if(param==0 || param ==1){
+				jComboBox_out.setSelectedIndex(param);
+			}
+		}
+	}
+
+	@Override
+	public void updatePhase() {
+		this.currentphase.setParameter(String.valueOf(jComboBox_out.getSelectedIndex()));		
+	}
+
+	@Override
+	public void setInstructions() {}
+
+	@Override
+	public void setPossibleFunctions() {
+		possibleFunction = new String[1];
+		possibleFunction[0] = Function.OUT.getName();
+	}
 }

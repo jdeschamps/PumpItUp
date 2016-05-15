@@ -72,12 +72,14 @@ public class JumpFunctionPanel extends FunctionPanel {
     // End of variables declaration//GEN-END:variables
 	@Override
 	public void setPhase(Phase p) {
-		this.currentphase = p;
-		int param=0;
-		try{
-			param = Integer.parseInt(p.getCommand().substring(3, 2));
-		} catch (Exception e){}
-		jSpinner_phase.setValue(param);
+		if(p.getFunction().equals(possibleFunction[0]) || p.getFunction().equals(possibleFunction[1])){
+			this.currentphase = p;
+			int param=0;
+			try{
+				param = Integer.parseInt(p.getCommand().substring(3, 2));
+			} catch (Exception e){}
+			jSpinner_phase.setValue(param);
+		}
 	}
 
 	@Override

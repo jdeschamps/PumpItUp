@@ -102,17 +102,19 @@ public class EventFunctionPanel extends FunctionPanel {
 
 	@Override
 	public void setPhase(Phase p) {
-		this.currentphase = p;
-		if(p.getFunction().equals(possibleFunction[0])){
-			jComboBox_edge.setSelectedIndex(0);
-		} else if(p.getFunction().equals(possibleFunction[1])){
-			jComboBox_edge.setSelectedIndex(0);
+		if(p.getFunction().equals(possibleFunction[0]) || p.getFunction().equals(possibleFunction[1])){ 
+			this.currentphase = p;
+			if(p.getFunction().equals(possibleFunction[0])){
+				jComboBox_edge.setSelectedIndex(0);
+			} else if(p.getFunction().equals(possibleFunction[1])){
+				jComboBox_edge.setSelectedIndex(0);
+			}
+			int param=0;
+			try{
+				param = Integer.parseInt(p.getCommand().substring(3, 2));
+			} catch (Exception e){}
+			jSpinner_phase.setValue(param);
 		}
-		int param=0;
-		try{
-			param = Integer.parseInt(p.getCommand().substring(3, 2));
-		} catch (Exception e){}
-		jSpinner_phase.setValue(param);
 	}
 	
 

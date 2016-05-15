@@ -4,11 +4,18 @@
  */
 package functionpanels;
 
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import data.Function;
+import data.Phase;
+
 /**
  *
  * @author Ries
  */
-public class PauseFunctionPanel extends javax.swing.JPanel {
+public class PauseFunctionPanel extends FunctionPanel {
 
     /**
      * Creates new form RateFunctionPanel
@@ -29,15 +36,30 @@ public class PauseFunctionPanel extends javax.swing.JPanel {
         jLabel1_pause = new javax.swing.JLabel();
         jLabel_format = new javax.swing.JLabel();
         jComboBox_format = new javax.swing.JComboBox();
-        jTextField_pause = new javax.swing.JTextField();
+        model1 = new SpinnerNumberModel(0, 0, 9.9, 0.1);  
+        model2 = new SpinnerNumberModel(0, 0, 99, 1);  
+        jSpinner_pause = new javax.swing.JSpinner(model2);
+        jSpinner_pause.addChangeListener(new ChangeListener() {      
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				updatePhase();
+			}
+        });
 
         jLabel1_pause.setText("Pause (s):");
 
         jLabel_format.setText("Format:");
 
         jComboBox_format.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "nn", "n.n" }));
-
-        jTextField_pause.setText("34");
+        jComboBox_format.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	if(jComboBox_format.getSelectedIndex()==0){
+            		jSpinner_pause.setModel(model2);
+            	} else {
+            		jSpinner_pause.setModel(model1);
+            	}
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -51,7 +73,7 @@ public class PauseFunctionPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jComboBox_format, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField_pause))
+                    .addComponent(jSpinner_pause))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -64,7 +86,7 @@ public class PauseFunctionPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1_pause)
-                    .addComponent(jTextField_pause, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinner_pause, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -72,6 +94,33 @@ public class PauseFunctionPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox jComboBox_format;
     private javax.swing.JLabel jLabel1_pause;
     private javax.swing.JLabel jLabel_format;
-    private javax.swing.JTextField jTextField_pause;
+    private javax.swing.JSpinner jSpinner_pause;
+    private SpinnerNumberModel model1;
+    private SpinnerNumberModel model2;
     // End of variables declaration//GEN-END:variables
+	@Override
+	public void setPhase(Phase p) {
+		if(p.getFunction().equals(possibleFunction[0])){
+			this.currentphase = p;
+			int param=0;
+			try{
+				param = Integer.parseInt(p.getCommand().substring(3, 3));
+			} catch (Exception e){}
+			jSpinner_pause.setValue(param);			/////////////////// here it might go wrong, check the behavior
+		}
+	}
+
+	@Override
+	public void updatePhase() {
+		this.currentphase.setParameter(String.valueOf((Double) jSpinner_pause.getValue()));
+	}
+
+	@Override
+	public void setInstructions() {}
+
+	@Override
+	public void setPossibleFunctions() {
+		possibleFunction = new String[1];
+		possibleFunction[0] = Function.PAS.getName();
+	}
 }

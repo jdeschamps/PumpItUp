@@ -4,11 +4,18 @@
  */
 package functionpanels;
 
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import data.Function;
+import data.Phase;
+
 /**
  *
  * @author Ries
  */
-public class LoopToPreviousFunctionPanel extends javax.swing.JPanel {
+public class LoopToPreviousFunctionPanel extends FunctionPanel {
 
     /**
      * Creates new form RateFunctionPanel
@@ -27,7 +34,14 @@ public class LoopToPreviousFunctionPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel_loop = new javax.swing.JLabel();
-        jSpinner_phase = new javax.swing.JSpinner();
+        SpinnerNumberModel model1 = new SpinnerNumberModel(1, 1, 99, 1);  
+        jSpinner_phase = new javax.swing.JSpinner(model1);
+        jSpinner_phase.addChangeListener(new ChangeListener() {      
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				updatePhase();
+			}
+        });
         jLabel_times = new javax.swing.JLabel();
 
         jLabel_loop.setText("Loop to previous loop:");
@@ -66,4 +80,30 @@ public class LoopToPreviousFunctionPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel_times;
     private javax.swing.JSpinner jSpinner_phase;
     // End of variables declaration//GEN-END:variables
+	@Override
+	public void setPhase(Phase p) {
+		if(p.getFunction().equals(possibleFunction[0]) || p.getFunction().equals(possibleFunction[1])){
+			this.currentphase = p;
+			int param=0;
+			try{
+				param = Integer.parseInt(p.getCommand().substring(3, 2));
+			} catch (Exception e){}
+			jSpinner_phase.setValue(param);
+		}
+	}
+
+	@Override
+	public void updatePhase() {
+		this.currentphase.setParameter(String.valueOf((Integer) jSpinner_phase.getValue()));		
+	}
+
+	@Override
+	public void setInstructions() {	}
+
+	@Override
+	public void setPossibleFunctions() {
+		possibleFunction = new String[2];
+		possibleFunction[1] = Function.LOP.getName();
+		possibleFunction[0] = Function.LPE.getName();
+	}
 }
