@@ -11,7 +11,6 @@ public abstract class FunctionPanel extends JPanel {
 
 	protected String[] possibleFunction; 
 	protected Phase currentphase;
-	protected String command = "";
 	protected ArrayList<Instruction> instructions;
 	
 	public FunctionPanel(){
@@ -20,20 +19,12 @@ public abstract class FunctionPanel extends JPanel {
 		setPossibleFunctions();
 	}
 	
-	public String getParameter(){
-		return command;
-	}
-	
 	public ArrayList<Instruction> getInstructions(){
 		return instructions;
 	}
 	
 	public int getNumberInstructions(){
 		return instructions.size();
-	}
-	
-	public void setFunction(String param){
-		command = param;
 	}
 	
 	public abstract void setPhase(Phase p);

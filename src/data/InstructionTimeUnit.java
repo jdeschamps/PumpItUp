@@ -1,11 +1,11 @@
 package data;
 
-public enum TimeUnit {
+public enum InstructionTimeUnit {
 	HOUR("hr"), MIN("min"), SEC("sec");
 	
 	String name;
 	
-	TimeUnit(String s){
+	InstructionTimeUnit(String s){
 		name = s;
 	}
 	public String getName(){

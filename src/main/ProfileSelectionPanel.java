@@ -9,12 +9,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.File;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import data.Controller;
 import data.Function;
@@ -23,6 +28,7 @@ import data.Profile;
 import data.Pump;
 import functionpanels.EmptyFunctionPanel;
 import functionpanels.EventFunctionPanel;
+import functionpanels.FunctionPanel;
 import functionpanels.JumpFunctionPanel;
 import functionpanels.LoopToPreviousFunctionPanel;
 import functionpanels.OutFunctionPanel;
@@ -40,16 +46,12 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
 
     public ProfileSelectionPanel(Controller controller) {
     	this.controller = controller;
-    	newProfile = true;
-    	initComponents();
-    }
-
-    public ProfileSelectionPanel(Controller controller, Profile profile) {
-    	this.controller = controller;
     	newProfile = false;
-    	initComponents();
     	
-    	fillProfile(profile);
+    	System.out.println("Controller has: "+controller.getNumberPumps()+" pumps");
+    	
+    	initComponents();
+		fillProfile();    	
     }
 
 	/**
@@ -100,6 +102,7 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
 
         listPhases =  new DefaultListModel();
         comboAddresses = new DefaultComboBoxModel();
+        comboAddresses.addElement("0");
         listPumps =  new DefaultListModel();
 
         ///////////////////////////////////////////////////////////////// Pumps properties
@@ -146,13 +149,17 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				String s = jTextField_diameter.getText();
-				controller.getPump(jList_pumps.getSelectedIndex()).setName(s);;
+				if(jList_pumps.getSelectedIndex()>=0){
+					controller.getPump(jList_pumps.getSelectedIndex()).setName(s);
+				}
 		}});
         jTextField_name.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String s = jTextField_diameter.getText();
-				controller.getPump(jList_pumps.getSelectedIndex()).setName(s);
+				if(jList_pumps.getSelectedIndex()>=0){
+					controller.getPump(jList_pumps.getSelectedIndex()).setName(s);
+				}
         }});
 
         jLabel_address.setText("Address:");
@@ -161,7 +168,9 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
         jComboBox_address.setSelectedIndex(0);
         jComboBox_address.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	controller.getPump(jList_pumps.getSelectedIndex()).setAddress(jComboBox_address.getSelectedIndex());
+            	if(jList_pumps.getSelectedIndex()>=0 && jComboBox_address.getSelectedIndex()>=0){
+            		controller.getPump(jList_pumps.getSelectedIndex()).setAddress(jComboBox_address.getSelectedIndex());
+            	}
             }
         });
         
@@ -326,6 +335,7 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
         jButton_addpump.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	controller.addPump();
+            	fillPumps();
             	setSelectedPump(controller.getNumberPumps()-1);
             }
         });
@@ -334,6 +344,7 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
         jButton_removepump.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	controller.removePump(jList_pumps.getSelectedIndex());
+            	fillPumps();
             	setSelectedPump(controller.getNumberPumps()-1);
             }
         });
@@ -408,10 +419,32 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
 
         ///////////////////////////////////////////////////////////////// lower panel
         jButton_save.setText("Save");
+        jButton_save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	FileNameExtensionFilter filter = new FileNameExtensionFilter("piuprofile");
 
+            	JFileChooser fileChooser = new JFileChooser();
+            	fileChooser.setFileFilter(filter);
+            	fileChooser.setDialogTitle("Save profile");   
+            	 
+            	int userSelection = fileChooser.showSaveDialog(new JFrame());
+            	 
+            	if (userSelection == JFileChooser.APPROVE_OPTION) {
+            	    File fileToSave = fileChooser.getSelectedFile();
+            	    controller.saveCurrentProfile(fileToSave.getName());
+            	}
+            }
+        });
+        
         jCheckBox_preview.setText("Preview");
 
         jButton_quit.setText("Quit");
+        jButton_quit.setVisible(false);
+        jButton_quit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	
+            }
+        });
 
         javax.swing.GroupLayout jPanel_actionsLayout = new javax.swing.GroupLayout(jPanel_actions);
         jPanel_actions.setLayout(jPanel_actionsLayout);
@@ -464,30 +497,30 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
         );
     }
 
-	private void setFunctionSelection() {
+	private void setFunctionSelection() { // when setting the function
 		CardLayout cl = (CardLayout)(jPanel_cardlayout.getLayout());
 	    cl.show(jPanel_cardlayout, getCardName((String) jComboBox_function.getSelectedItem()));
 	    controller.getPump(jList_pumps.getSelectedIndex()).getProgram().getPhase(jList_phases.getSelectedIndex()).setFunction((String) jComboBox_function.getSelectedItem());
 	}
 
-	private void setSelectedFunction(Phase p) {
+	private void setSelectedFunction(Phase p) { // when selecting the phase
 		CardLayout cl = (CardLayout)(jPanel_cardlayout.getLayout());
-		
-	    cl.show(jPanel_cardlayout, getCardName((String) jComboBox_function.getSelectedItem()));
+	    cl.show(jPanel_cardlayout, getCardName(p.getFunction()));
+	    getPanelCard(getCardName(p.getFunction())).setPhase(p);
 	}
     
     private void fillPhaseProperties(Phase p){
-    	//////////////////////////////////////////////////////////////////////
         jPanel_phaseproperties.setBorder(javax.swing.BorderFactory.createTitledBorder(p.getFunction()));
         setSelectedFunction(p);
-    	// show function
-    	// selected corresponding panel
     }
 
     private void fillPumpProperties(Pump p){
         jPanel_pumpproperties.setBorder(javax.swing.BorderFactory.createTitledBorder(p.getName()));
         jTextField_diameter.setText(String.valueOf(p.getDiameter()));
         jTextField_name.setText(p.getName());
+        
+        fillCombobox();
+        
         jComboBox_address.setSelectedIndex(p.getAddress());
     	
     	fillPhases();
@@ -501,16 +534,32 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     private void setSelectedPump(int i){
 		jList_pumps.setSelectedIndex(i);
 		fillPumpProperties(controller.getPump(i));
+		fillPhases();
     }
     
     private void fillPhases() {
     	listPhases.clear();
-    	int n = controller.getPump(jList_pumps.getSelectedIndex()).getProgram().getNumberPhases();
-    	String[] s = controller.getPump(jList_pumps.getSelectedIndex()).getProgram().getPhaseList();
+    	if(jList_pumps.getSelectedIndex()>=0){
+	    	int n = controller.getPump(jList_pumps.getSelectedIndex()).getProgram().getNumberPhases();
+	    	String[] s = controller.getPump(jList_pumps.getSelectedIndex()).getProgram().getPhaseList();
+	    	for(int i=0;i<n;i++){
+	    		listPhases.addElement(s[i]);
+	    	}
+	    	setSelectedPhase(0);
+    	}
+	}
+    
+    private void fillPumps() {
+    	listPumps.clear();
+    	int n = controller.getNumberPumps();
+    	System.out.println(n);
+    	String[] s = controller.getPumpList();
     	for(int i=0;i<n;i++){
+
+        	System.out.println(s[i]);
     		listPhases.addElement(s[i]);
     	}
-    	setSelectedPhase(0);
+    	setSelectedPump(0);
 	}
     
     private void fillCombobox(){
@@ -521,10 +570,27 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     	}
     }
     
-	private void fillProfile(Profile profile) {
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private void fillProfile() {
+		fillPumps();
 	}
 
+	public FunctionPanel getPanelCard(String key){
+		if(key.equals("card0")){
+			return rateFunctionPanel1;
+		}else if(key.equals("card1")){
+			return outFunctionPanel1;
+		}else if(key.equals("card2")){
+			return pauseFunctionPanel1;						
+		}else if(key.equals("card3")){
+			return emptyFunctionPanel1;
+		}else if(key.equals("card4")){
+			return eventFunctionPanel1;
+		}else if(key.equals("card5")){
+			return jumpFunctionPanel1;
+		}else{
+			return loopToPreviousFunctionPanel1;
+		}
+	}
 	public String getCardName(String function){
 		if(function.equals(Function.STP)){
 			return "card3";

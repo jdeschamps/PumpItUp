@@ -26,11 +26,11 @@ public class Controller {
 	//////////////////////////////////////// Pumps
 	public void emptyPumps(){
 		pumps.clear();
-		pumps.add(new Pump());
+		pumps.add(new Pump(0));
 	}
 	
 	public void addPump(){
-		pumps.add(new Pump());
+		pumps.add(new Pump(pumps.size()));
 	}
 	
 	public void removePump(int i){
@@ -38,7 +38,7 @@ public class Controller {
 	}
 	
 	public String[] getPumpList(){
-		int i = pumps.size();
+		int i = getNumberPumps();
 		String[] def = {"Empty"};
 		
 		if(i>0){
@@ -81,7 +81,8 @@ public class Controller {
 		return profile;
 	}
 
-	public void saveCurrentProfile(){
+	public void saveCurrentProfile(String s){
+		profile.setName(s);
 		manager.saveProfile(profile);
 	}
 	
@@ -110,7 +111,8 @@ public class Controller {
 	////////////////////////////////////////////////// Controls
 	public void setProperty(String property, String value){
 		try {
-			core.setProperty(device, property, value);
+			//core.setProperty(device, property, value);
+			System.out.println(property+" "+value);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -118,13 +120,29 @@ public class Controller {
 	
 	public void setProperty(String property, int value){
 		try {
-			core.setProperty(device, property, value);
+			//core.setProperty(device, property, value);
+			System.out.println(property+" "+value);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	public void setPhase(int i, Pump p, Phase ph){
+		setProperty("Phase Pump"+p.getAddress(),i);
+		setProperty("Function Pump"+p.getAddress(),"FUN"+ph.getCommand());
+		for(int j=0;j<ph.getNumberInstructions();j++){
+			setProperty(ph.getInstructions().get(j).getCommand()+" Pump"+p.getAddress(),ph.getInstructions().get(j).getParameter());
+		}
+	}
+	
 	public void startPumps(){
+		// send program
+		for(int i=0;i<getNumberPumps();i++){
+			for(int j=0;j<pumps.get(i).getProgram().getNumberPhases();j++){
+				setPhase(j, pumps.get(i),pumps.get(i).getProgram().getPhase(j));
+			}
+		}
+		
 		for(int i=0;i<getNumberPumps();i++){
 			setProperty(run+pumps.get(i).getAddress(), 1);
 		}

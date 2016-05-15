@@ -2,18 +2,18 @@ package data;
 
 public class TimeInstruction extends Instruction{
 
-	private TimeUnit unit;			
+	private InstructionTimeUnit unit;			
 	private double time;
 	private double rate;
 	
-	public TimeInstruction(TimeUnit unit, double time, double rate) {
-		super("VOL");
+	public TimeInstruction(InstructionTimeUnit unit, double time, double rate) {
+		super("VOL","");
 		setUnit(unit);
 		setTimeValue(time);
 		setRate(rate);
 	}
 
-	public void setUnit(TimeUnit unit){
+	public void setUnit(InstructionTimeUnit unit){
 		this.unit = unit;
 	}
 	public void setTimeValue(double time){
@@ -23,7 +23,7 @@ public class TimeInstruction extends Instruction{
 		this.rate = rate;
 	}
 	
-	public TimeUnit getUnit(){
+	public InstructionTimeUnit getUnit(){
 		return unit;
 	}
 	public double getTime(){
@@ -34,9 +34,9 @@ public class TimeInstruction extends Instruction{
 	}
 	
 	public double getTimeMin(){
-		if(unit == TimeUnit.HOUR){
+		if(unit == InstructionTimeUnit.HOUR){
 			return time*60;
-		} else if(unit == TimeUnit.SEC){
+		} else if(unit == InstructionTimeUnit.SEC){
 			return time/60;
 		}
 		return time;

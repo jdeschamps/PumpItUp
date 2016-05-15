@@ -3,13 +3,13 @@ package data;
 import java.util.ArrayList;
 
 public class Phase {
-
 	
 	private Function function = Function.STP;
 	private String parameter = "";
 	private ArrayList<Instruction> instructions;
 
 	public Phase(){
+		instructions = new ArrayList<Instruction>();
 	}
 	
 	public Phase(String function){
@@ -30,6 +30,8 @@ public class Phase {
 
 	public void setFunction(String s){
 		function = Function.valueOf(s);
+		instructions.clear();
+		parameter = "";
 	}
 	
 	public String getFunction(){
@@ -39,9 +41,13 @@ public class Phase {
 	public void setParameter(String s){
 		parameter = s;
 	}
-	
+
 	public void addInstruction(Instruction inst){
 		instructions.add(inst);
+	}
+
+	public void setInstructions(ArrayList<Instruction> inst){
+		instructions = inst;
 	}
 	
 	public String getCommand(){
@@ -51,8 +57,12 @@ public class Phase {
 	public ArrayList<Instruction> getInstructions(){
 		if(instructions == null){
 			instructions = new ArrayList<Instruction>();
-			instructions.add(new Instruction(""));
+			instructions.add(new Instruction("",""));
 		}
 		return instructions;
+	}
+	
+	public int getNumberInstructions(){
+		return instructions.size();
 	}
 }

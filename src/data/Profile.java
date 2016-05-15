@@ -8,6 +8,12 @@ public class Profile implements Serializable{
 	private String name;
 	private ArrayList<Pump> pumps;
 
+	public Profile(){
+		this.name = "Empty";
+		this.pumps = new ArrayList<Pump>();
+		pumps.add(new Pump(0));
+	}
+	
 	public Profile(String name, ArrayList<Pump> pumps){
 		this.name = name;
 		this.pumps = pumps;
@@ -19,6 +25,10 @@ public class Profile implements Serializable{
 	
 	public String getName(){
 		return name;
+	}
+	
+	public void setName(String s){
+		this.name = name;
 	}
 	
 	public int getNumberPumps(){

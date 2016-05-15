@@ -7,9 +7,9 @@ public class Pump {
 	private int diameter;
 	private Program program;
 
-	public Pump(){
+	public Pump(int address){
 		this.name = "Unnamed";
-		this.address = 0;
+		this.address = address;
 		this.diameter = 12;
 		this.program =  new Program();
 	}

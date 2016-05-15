@@ -150,6 +150,7 @@ public class MainPanel extends javax.swing.JPanel {
         	public void valueChanged(ListSelectionEvent e){
         		if (e.getValueIsAdjusting() == false){
         			Profile p = controller.getProfileFromList(jList_profile.getSelectedIndex());
+        			controller.setCurrentProfile(p);
         			jTextField_name.setText(p.getName());
         			jTextField_number.setText(String.valueOf(p.getNumberPumps()));
         			fillList(listPumps);
@@ -163,6 +164,7 @@ public class MainPanel extends javax.swing.JPanel {
         jButton_newprofile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	JFrame frame = new JFrame();
+            	controller.setCurrentProfile(new Profile());
             	frame.add(new ProfileSelectionPanel(controller));
             	frame.pack();
             	frame.setVisible(true);
@@ -173,7 +175,7 @@ public class MainPanel extends javax.swing.JPanel {
         jButton_modifyprofile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	JFrame frame = new JFrame();
-            	frame.add(new ProfileSelectionPanel(controller, controller.getProfileFromList(jList_profile.getSelectedIndex())));
+            	frame.add(new ProfileSelectionPanel(controller));
             	frame.pack();
             	frame.setVisible(true);
             }
@@ -277,7 +279,7 @@ public class MainPanel extends javax.swing.JPanel {
 	}
 
 	protected void loadProfile() {
-    	FileNameExtensionFilter filter = new FileNameExtensionFilter("piuprofile");
+    	FileNameExtensionFilter filter = new FileNameExtensionFilter("piuprofile","piuprofile");
     	JFileChooser fileChooser = new JFileChooser();
     	fileChooser.setFileFilter(filter);
     	fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -286,6 +288,7 @@ public class MainPanel extends javax.swing.JPanel {
     	    File selectedFile = fileChooser.getSelectedFile();
     	    controller.loadNewProfile(selectedFile);
     	    fillList(listprofileAvailable);
+    	    jList_profile.setSelectedIndex(listprofileAvailable.size()-1);
     	}
 	}
 

@@ -4,11 +4,24 @@
  */
 package functionpanels;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
+import javax.swing.ButtonGroup;
+
+import data.Function;
+import data.Instruction;
+import data.InstructionTimeUnit;
+import data.Phase;
+import data.TimeInstruction;
+
 /**
  *
  * @author Ries
  */
-public class RateFunctionPanel extends javax.swing.JPanel {
+public class RateFunctionPanel extends FunctionPanel {
 
     /**
      * Creates new form RateFunctionPanel
@@ -33,20 +46,70 @@ public class RateFunctionPanel extends javax.swing.JPanel {
         jLabel_time = new javax.swing.JLabel();
         jToggleButton_withdraw = new javax.swing.JToggleButton();
         jToggleButton_infuse = new javax.swing.JToggleButton();
+        
+        buttongroup = new ButtonGroup();
+        buttongroup.add(jToggleButton_withdraw);
+        buttongroup.add(jToggleButton_infuse);
 
+        jToggleButton_infuse.setSelected(true);
+
+        jToggleButton_withdraw.setText("<");
+        jToggleButton_infuse.setText(">");
+        
+        jToggleButton_withdraw.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	dir = "WDR";
+            	updatePhase();
+            }
+        });
+        jToggleButton_infuse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	dir = "INF";
+            	updatePhase();
+            }
+        });
+        
         jLabel_rate.setText("Rate (uL/mn):");
 
-        jTextField_rate.setText("300");
+        jTextField_rate.setText("");
+        jTextField_rate.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent arg0) {}
+			@Override
+			public void focusLost(FocusEvent arg0) {
+            	updatePhase();
+		}});
+        jTextField_rate.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+            	updatePhase();
+        }});
 
-        jComboBox_time.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "h", "min", "sec" }));
 
-        jTextField_time.setText("65");
+        jComboBox_time.setModel(new javax.swing.DefaultComboBoxModel(new String[] { InstructionTimeUnit.HOUR.getName(), InstructionTimeUnit.MIN.getName(), InstructionTimeUnit.SEC.getName() }));
+        jComboBox_time.setSelectedIndex(1);
+        jComboBox_time.addActionListener (new ActionListener () {
+            public void actionPerformed(ActionEvent e) {
+                updatePhase();
+            }
+        });
+        
+        jTextField_time.setText("");
+        jTextField_time.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent arg0) {}
+			@Override
+			public void focusLost(FocusEvent arg0) {
+            	updatePhase();
+		}});
+        jTextField_time.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+            	updatePhase();
+        }});
 
         jLabel_time.setText("Time:");
 
-        jToggleButton_withdraw.setText("<");
-
-        jToggleButton_infuse.setText(">");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -95,5 +158,53 @@ public class RateFunctionPanel extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField_time;
     private javax.swing.JToggleButton jToggleButton_infuse;
     private javax.swing.JToggleButton jToggleButton_withdraw;
+    private ButtonGroup buttongroup;
+    
+    private String dir="INF";
     // End of variables declaration//GEN-END:variables
+	@Override
+	public void setPhase(Phase p) {
+		if(p.getFunction().equals(possibleFunction[0]) || p.getFunction().equals(possibleFunction[1]) || p.getFunction().equals(possibleFunction[2])){
+			this.currentphase = p;
+			if(!p.getInstructions().isEmpty()){
+				try{
+					jTextField_rate.setText(p.getInstructions().get(0).getParameter());
+					jTextField_time.setText(p.getInstructions().get(1).getParameter());
+					jComboBox_time.setSelectedItem(((TimeInstruction) p.getInstructions().get(1)).getUnit().getName());
+					dir = p.getInstructions().get(2).getParameter();
+					if(dir.equals("INF")){
+						jToggleButton_infuse.setSelected(true);
+					} else if(dir.equals("WDR")){
+						jToggleButton_withdraw.setSelected(true);
+					}
+				} catch(Exception e){
+				}
+			}
+		}
+	}
+
+	@Override
+	public void updatePhase() {
+		instructions.get(0).setParameter(jTextField_rate.getText());
+		instructions.get(1).setParameter(jTextField_time.getText());
+		((TimeInstruction) instructions.get(1)).setUnit(InstructionTimeUnit.valueOf((String) jComboBox_time.getSelectedItem()));
+		instructions.get(2).setParameter(dir);
+		
+		currentphase.setInstructions(instructions);
+	}
+
+	@Override
+	public void setInstructions() {
+		instructions.add(new Instruction("RAT",jTextField_rate.getText()));
+		instructions.add(new TimeInstruction(InstructionTimeUnit.MIN,Double.parseDouble(jTextField_time.getText()),Double.parseDouble(jTextField_rate.getText())));
+		instructions.add(new Instruction("DIR",dir));
+	}
+
+	@Override
+	public void setPossibleFunctions() {
+		possibleFunction = new String[3];
+		possibleFunction[0] = Function.RAT.getName();
+		possibleFunction[1] = Function.INC.getName();
+		possibleFunction[2] = Function.DEC.getName();
+	}
 }
