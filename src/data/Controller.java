@@ -1,15 +1,12 @@
 package data;
 
 import java.io.File;
-import java.util.ArrayList;
-
 import saver.ProfileManager;
 import mmcorej.CMMCore;
 
 public class Controller {
 
 	private String device = "Aladdin";
-	private ArrayList<Pump> pumps;
 	private CMMCore core;
 	private Profile profile;
 	private ProfileManager manager;
@@ -19,64 +16,47 @@ public class Controller {
 	
 	public Controller(CMMCore core){
 		this.core = core;
-		pumps = new ArrayList<Pump>();
+		profile = new Profile();
 		manager = new ProfileManager();
 	}
 	
 	//////////////////////////////////////// Pumps
 	public void emptyPumps(){
-		pumps.clear();
-		pumps.add(new Pump());
+		profile.emptyPumps();
 	}
 	
 	public void addPump(){
-		pumps.add(new Pump());
+		profile.addPump();
 	}
 	
 	public void removePump(int i){
-		pumps.remove(i);
+		profile.removePump(i);
 	}
 	
 	public String[] getPumpList(){
-		int i = pumps.size();
-		String[] def = {"Empty"};
-		
-		if(i>0){
-			String[] s = new String[i];
-			
-			for(int j=0;j<i;j++){
-				s[j] = pumps.get(j).getName(); 
-			}
-		}
-		
-		return def;
+		return profile.getPumpList();
 	}
 
 	public int getNumberPumps(){
-		return pumps.size();
+		return profile.getNumberPumps();
 	}
 
 	public Pump getPump(int selectedIndex) {
-		if(selectedIndex<0 || selectedIndex>= getNumberPumps()){
-			return null;
-		}
-		return pumps.get(selectedIndex);
+		return profile.getPump(selectedIndex);
 	}
 	
 	///////////////////////////////////////// Profile
 	public void setCurrentProfile(Profile profile){
 		this.profile = profile;
-		pumps = profile.getPumps();
 	}
 	
 	public void setCurrentProfile(int i){
 		this.profile = manager.getProfile(i);
-		pumps = profile.getPumps();
 	}
 	
 	public Profile getCurrentProfile(){
 		if(profile == null){
-			generateProfile("");
+			generateProfile("New");
 		}
 		return profile;
 	}
@@ -90,7 +70,7 @@ public class Controller {
 	}
 	
 	public void generateProfile(String name){
-		profile = new Profile(name, pumps);
+		profile = new Profile(name);
 	}
 	
 	public Profile getProfileFromList(int i){
@@ -126,13 +106,13 @@ public class Controller {
 
 	public void startPumps(){
 		for(int i=0;i<getNumberPumps();i++){
-			setProperty(run+pumps.get(i).getAddress(), 1);
+			setProperty(run+getPump(i).getAddress(), 1);
 		}
 	}
 
 	public void stopPumps(){
 		for(int i=0;i<getNumberPumps();i++){
-			setProperty(run+pumps.get(i).getAddress(), 0);
+			setProperty(run+getPump(i).getAddress(), 0);
 		}
 	}
 }
