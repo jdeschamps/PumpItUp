@@ -4,13 +4,8 @@
  */
 package main;
 
-import java.util.Locale;
-
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
 import mmcorej.CMMCore;
-
 import org.micromanager.api.MMPlugin;
 import org.micromanager.api.ScriptInterface;
 

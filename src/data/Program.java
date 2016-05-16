@@ -39,7 +39,7 @@ public class Program {
 	}
 	
 	public void moveDownPhase(int i){
-		if(i>=0 && phases.size()>1){
+		if(i>=0 && i<phases.size()-1){
 			Collections.swap(phases, i, i+1);
 		}
 	}
@@ -49,15 +49,16 @@ public class Program {
 	}
 	
 	public String[] getPhaseList(){
-		int i = phases.size();
+		int n = phases.size();
 		String[] def = {"Empty"};
 		
-		if(i>0){
-			String[] s = new String[i];
+		if(n>0){
+			String[] s = new String[n];
 			
-			for(int j=0;j<i;j++){
+			for(int j=0;j<n;j++){
 				s[j] = phases.get(j).getFunction(); 
 			}
+			return s;
 		}
 		
 		return def;

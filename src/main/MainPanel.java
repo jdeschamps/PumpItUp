@@ -77,8 +77,9 @@ public class MainPanel extends javax.swing.JPanel {
         });
         
         jToggleButton_pause.setText("||");
-
+        jToggleButton_pause.setVisible(false);
         jToggleButton_resume.setText(">");
+        jToggleButton_resume.setVisible(false);
 
         javax.swing.GroupLayout jPanel_controlsLayout = new javax.swing.GroupLayout(jPanel_controls);
         jPanel_controls.setLayout(jPanel_controlsLayout);
@@ -175,7 +176,10 @@ public class MainPanel extends javax.swing.JPanel {
         jButton_modifyprofile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	JFrame frame = new JFrame();
-            	frame.add(new ProfileSelectionPanel(controller));
+            	if(jList_profile.getSelectedIndex()==-1){
+                	controller.setCurrentProfile(new Profile());
+            	} 
+        		frame.add(new ProfileSelectionPanel(controller));
             	frame.pack();
             	frame.setVisible(true);
             }

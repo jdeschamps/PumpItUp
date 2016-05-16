@@ -179,6 +179,12 @@ public class RateFunctionPanel extends FunctionPanel {
 					}
 				} catch(Exception e){
 				}
+			} else {
+				jTextField_rate.setText("0");
+				jTextField_time.setText("0");
+				jComboBox_time.setSelectedIndex(1);
+				dir = "INF";
+				jToggleButton_infuse.setSelected(true);
 			}
 		}
 	}
