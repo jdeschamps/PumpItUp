@@ -396,7 +396,7 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
         jButton_save.setText("Save");
         jButton_save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	FileNameExtensionFilter filter = new FileNameExtensionFilter("piuprofile");
+            	FileNameExtensionFilter filter = new FileNameExtensionFilter("PumpItUp profile","piuprofile");
 
             	JFileChooser fileChooser = new JFileChooser();
             	fileChooser.setFileFilter(filter);
@@ -507,7 +507,8 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     
     public void removePhase(){
    		controller.removePhase();
-    	updatePhaseList();	
+   		listPhases.remove(jList_phases.getSelectedIndex());
+    	//updatePhaseList();	
     } 
     
     public void addPhase(){
@@ -517,13 +518,68 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     
     public void movePhaseUp(){
     	controller.movePhaseUp();
-    	updatePhaseList();	
+    	moveUpEntry(listPhases,jList_phases.getSelectedIndex());
+    	//updatePhaseList();
+    	//exchangeEntries(listPhases,jList_phases.getSelectedIndex(),jList_phases.getSelectedIndex()-1);
     }
     
     public void movePhaseDown(){
     	controller.movePhaseDown();
-    	updatePhaseList();	
+    	moveDownEntry(listPhases,jList_phases.getSelectedIndex());
+    	//exchangeEntries(listPhases,jList_phases.getSelectedIndex(),jList_phases.getSelectedIndex()+1);
+    	//updatePhaseList();	
     }
+    
+    public void moveUpEntry(DefaultListModel list, int i){
+    	if(i>0 && i<list.size()){
+    		Object o = list.remove(i);
+    		list.add(i-1,o);
+    		System.out.println(arePhasesOutDated());
+    	}
+    }
+    
+    public void moveDownEntry(DefaultListModel list, int i){
+    	if(i>=0 && i<list.size()-1){
+    		Object o = list.remove(i);
+    		list.add(i+1,o);
+    		System.out.println(arePhasesOutDated());
+
+    	}
+    }
+   
+    public void exchangeEntries(DefaultListModel list, int i, int j){
+    	if(i!=j){
+    		if((i>=0 && i<list.size()) && (j>=0 && j<list.size())){
+	    									// [...; i ; ~~~ ; j ; ...] or [...; j ; ~~~ ; i ; ...] 
+	    		Object o2 = list.remove(j); // [...; i ; ~~~ ; ...] or [... ; ~~~ ; i ; ...] 
+	    		list.insertElementAt(o2, i); // [...; j ; i ; ~~~ ; ...] or [... ; ~~~ ; i ; j ; ...] 
+	    		Object[] o = new Object[Math.abs(j-i)-1];
+	    		int index=0;
+	    		
+	    		if(i<j){
+		    		for(int k = 0; k< j-i-1; k++){ // [...; j ; i ; ~~~ ; ...]
+		    			index = k+i+2;
+		    			o[k] = list.remove(index);  // [~~~] 
+		    		} 								// [...; j ; i ; ...] 
+		    		for(int k = 0; k< j-i-1; k++){
+		    			index = k+i+1;
+		    			list.insertElementAt(o[k], index); // [...; j ; ~ ; i ; ...] 
+		    		} 										// [...; j ; ~~~ ; i ; ...]
+	    		} else if(i>j){
+		    		for(int k = 0; k< i-j-1; k++){   // [... ; ~~~ ; i ; j ; ...] 
+		    			index = k+j;
+		    			o[k] = list.remove(index);  // [~~~] 
+		    		} 								// [...; i ; j ; ...] 
+		    		for(int k = 0; k< i-j-1; k++){
+		    			index = k+j+1;
+		    			list.insertElementAt(o[k], index); // [... ; i ; ~ ; j ; ...] 
+		    		} 										// [... ; i ; ~~~ ; j ; ...] 
+	    		}
+	    	}
+    	}
+    }
+    
+   
     
     public void updatePumpList(){
     	listPumps.clear();
@@ -536,15 +592,35 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     	}
     }
     
-    public void updatePhaseList(){
-    	listPhases.clear();
-    	int n = controller.getNumberPhases();
-    	String[] s = controller.getPhaseList();
-    	
-    	listPhases.clear();
-    	for(int i=0;i<n;i++){
-    		listPhases.addElement(s[i]);
+    public void updatePhaseList(){    	
+    	if(arePhasesOutDated()){
+        	System.out.println("clear phase");
+
+	    	listPhases.clear();
+	    	int n = controller.getNumberPhases();
+	    	String[] s = controller.getPhaseList();
+	    	
+	    	listPhases.clear();
+	    	for(int i=0;i<n;i++){
+	    		listPhases.addElement(s[i]);
+	    	}
     	}
+    }
+    
+    public boolean arePhasesOutDated(){
+    	String[] s = controller.getPhaseList();
+    	if(listPhases.getSize()!=s.length){
+    		return true;
+    	}
+    	
+    	for(int i=0;i<s.length;i++){
+    		if(!s[i].equals((String) listPhases.get(i))){
+    			return true;
+    		}
+    	}
+    	
+    	
+    	return false;
     }
     
     ///////////////////////////////////// move to (pump, phase)
@@ -577,135 +653,10 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
 		CardLayout cl = (CardLayout)(jPanel_cardlayout.getLayout());
 	    cl.show(jPanel_cardlayout, getCardName(p.getFunction()));
 	    getPanelCard(getCardName(p.getFunction())).setPhase(p);
+	    System.out.println("Selected function: "+p.getFunction()+" "+getCardName(p.getFunction()));
 	} 
 	
 	
-	
-    ///////////////////////////////////////////////////////////////////////
-    /*
-    public void setFunction(){
-		System.out.println("Set function "+jComboBox_function.getSelectedItem());
-
-    	int k = jList_pumps.getSelectedIndex();
-    	int n = jList_phases.getSelectedIndex();
-    	if(controller.hasPhase(k,n)){
-    		controller.getPump(k).getPhase(n).setFunction((String) jComboBox_function.getSelectedItem());
-    		setSelectedFunction(controller.getPump(k).getPhase(n));
-   		}
-    }
-
-    public void updateListPumps(){
-    	int n = controller.getNumberPumps();
-    	String[] s = controller.getPumpList();
-    	
-    	listPumps.clear();
-    	for(int i=0;i<n;i++){
-    		listPumps.addElement(s[i]);
-    	}
-    }
-    
-    public void updateListPumps(int selected){
-		System.out.println("Update list pumps");
-
-    	int n = controller.getNumberPumps();
-    	String[] s = controller.getPumpList();
-    	
-    	listPumps.clear();
-    	for(int i=0;i<n;i++){
-    		listPumps.addElement(s[i]);
-    		System.out.println("Update list pumps "+s[i]);
-
-    	}
-    	
-    	if(selected>=0 && selected<n){
-    		setSelectedPump(selected);
-    	} else {
-    		setSelectedPump(0);
-    	}
-    }
-    
-    private void setSelectedPump(int i){
-		if(controller.hasPump(i)){
-    		System.out.println("Set selected pump "+i);
-
-			//jList_pumps.setSelectedIndex(i);
-			fillPumpProperties(controller.getPump(i));
-			updateListPhases(controller.getPump(i),0);
-		}
-    }
-
-    private void fillPumpProperties(Pump p){
-		System.out.println("Fill pump property "+p.getName());
-    	
-        jPanel_pumpproperties.setBorder(javax.swing.BorderFactory.createTitledBorder(p.getName()));
-        jTextField_diameter.setText(String.valueOf(p.getDiameter()));
-        jTextField_name.setText(p.getName());
-        jComboBox_address.setSelectedIndex(p.getAddress());    	
-    }
-    public void updateListPhases(Pump p){
-	   	int n = p.getNumberPhases();
-	   	String[] s = p.getPhaseList();
-	   	
-	   	listPhases.clear();
-	   	for(int i=0;i<n;i++){
-	   		listPhases.addElement(s[i]);
-	   	}
-    }
-    
-    public void updateListPhases(Pump p, int selected){
-		System.out.println("Update phase list");
-
-    	if(p.hasPhase(selected)){
-	    	int n = p.getNumberPhases();
-	    	String[] s = p.getPhaseList();
-	    	
-	    	listPhases.clear();
-	    	for(int i=0;i<n;i++){
-	    		listPhases.addElement(s[i]);
-	    		System.out.println("Update phase list "+s[i]);
-
-	    	}
-	    	
-	    	if(selected>=0 && selected<n){
-	    		setSelectedPhase(p.getPhase(selected),selected);
-	    	} else {
-	    		setSelectedPhase(p.getPhase(selected),0);
-	    	}
-    	}
-    }
-
-    private void setSelectedPhase(Phase p, int i){
-		System.out.println("Set selected phase "+i);
-
-		//jList_phases.setSelectedIndex(i);
-		fillPhaseProperties(p);
-    }
-    private void fillPumpProperties(Pump p){
-		System.out.println("Fill pump property "+p.getName());
-    	
-        jPanel_pumpproperties.setBorder(javax.swing.BorderFactory.createTitledBorder(p.getName()));
-        jTextField_diameter.setText(String.valueOf(p.getDiameter()));
-        jTextField_name.setText(p.getName());
-        jComboBox_address.setSelectedIndex(p.getAddress());    	
-    }
-    private void fillPhaseProperties(Phase p){
-		System.out.println("Fill phase property "+p.getFunction());
-
-        jPanel_phaseproperties.setBorder(javax.swing.BorderFactory.createTitledBorder(p.getFunction()));
-        jComboBox_function.setSelectedItem(p.getFunction());
-        setSelectedFunction(p);
-    }
-    
-	private void setSelectedFunction(Phase p) { // when selecting the phase
-		System.out.println("Set selected card "+p.getFunction());
-
-		
-		CardLayout cl = (CardLayout)(jPanel_cardlayout.getLayout());
-	    cl.show(jPanel_cardlayout, getCardName(p.getFunction()));
-	    getPanelCard(getCardName(p.getFunction())).setPhase(p);
-	} 
-	
-	*/
 	public FunctionPanel getPanelCard(String key){
 		if(key.equals("card0")){
 			return rateFunctionPanel1;
@@ -724,35 +675,35 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
 		}
 	}
 	public String getCardName(String function){
-		if(function.equals(Function.STP)){
+		if(function.equals(Function.STP.getName())){
 			return "card3";
-		}else if(function.equals(Function.RAT)){
+		}else if(function.equals(Function.RAT.getName())){
 			return "card0";
-		}else if(function.equals(Function.PRL)){
+		}else if(function.equals(Function.PRL.getName())){
 			return "card3";						
-		}else if(function.equals(Function.PRI)){
+		}else if(function.equals(Function.PRI.getName())){
 			return "card3";
-		}else if(function.equals(Function.PAS)){
+		}else if(function.equals(Function.PAS.getName())){
 			return "card2";
-		}else if(function.equals(Function.OUT)){
+		}else if(function.equals(Function.OUT.getName())){
 			return "card1";
-		}else if(function.equals(Function.LPE)){
+		}else if(function.equals(Function.LPE.getName())){
 			return "card6";
-		}else if(function.equals(Function.LOP)){
+		}else if(function.equals(Function.LOP.getName())){
 			return "card6";
-		}else if(function.equals(Function.JMP)){
+		}else if(function.equals(Function.JMP.getName())){
 			return "card5";
-		}else if(function.equals(Function.INC)){
+		}else if(function.equals(Function.INC.getName())){
 			return "card0";
-		}else if(function.equals(Function.IF)){
+		}else if(function.equals(Function.IF.getName())){
 			return "card5";
-		}else if(function.equals(Function.EVS)){
+		}else if(function.equals(Function.EVS.getName())){
 			return "card4";
-		}else if(function.equals(Function.EVN)){
+		}else if(function.equals(Function.EVN.getName())){
 			return "card4";
-		}else if(function.equals(Function.DEC)){
+		}else if(function.equals(Function.DEC.getName())){
 			return "card0";
-		}else if(function.equals(Function.BEP)){
+		}else if(function.equals(Function.BEP.getName())){
 			return "card3";
 		}
 		return "card3";

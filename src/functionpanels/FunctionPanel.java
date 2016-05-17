@@ -16,7 +16,11 @@ public abstract class FunctionPanel extends JPanel {
 	public FunctionPanel(){
 		instructions = new ArrayList<Instruction>();
 		currentphase = new Phase();
+
+		initComponents();
+
 		setPossibleFunctions();
+		setInstructions();
 	}
 	
 	public ArrayList<Instruction> getInstructions(){
@@ -31,4 +35,5 @@ public abstract class FunctionPanel extends JPanel {
 	public abstract void updatePhase();
 	public abstract void setInstructions();
 	public abstract void setPossibleFunctions();
+	protected abstract void initComponents();
 }

@@ -21,7 +21,6 @@ public class PauseFunctionPanel extends FunctionPanel {
      * Creates new form RateFunctionPanel
      */
     public PauseFunctionPanel() {
-        initComponents();
     }
 
     /**
@@ -31,7 +30,7 @@ public class PauseFunctionPanel extends FunctionPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    protected void initComponents() {
 
         jLabel1_pause = new javax.swing.JLabel();
         jLabel_format = new javax.swing.JLabel();

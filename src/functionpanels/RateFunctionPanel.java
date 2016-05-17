@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 
@@ -27,7 +28,7 @@ public class RateFunctionPanel extends FunctionPanel {
      * Creates new form RateFunctionPanel
      */
     public RateFunctionPanel() {
-        initComponents();
+    	
     }
 
     /**
@@ -37,7 +38,7 @@ public class RateFunctionPanel extends FunctionPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    protected void initComponents() {
 
         jLabel_rate = new javax.swing.JLabel();
         jTextField_rate = new javax.swing.JTextField();
@@ -71,7 +72,7 @@ public class RateFunctionPanel extends FunctionPanel {
         
         jLabel_rate.setText("Rate (uL/mn):");
 
-        jTextField_rate.setText("");
+        jTextField_rate.setText("0");
         jTextField_rate.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent arg0) {}
@@ -94,7 +95,7 @@ public class RateFunctionPanel extends FunctionPanel {
             }
         });
         
-        jTextField_time.setText("");
+        jTextField_time.setText("0");
         jTextField_time.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent arg0) {}
@@ -191,19 +192,42 @@ public class RateFunctionPanel extends FunctionPanel {
 
 	@Override
 	public void updatePhase() {
-		instructions.get(0).setParameter(jTextField_rate.getText());
-		instructions.get(1).setParameter(jTextField_time.getText());
-		((TimeInstruction) instructions.get(1)).setUnit(InstructionTimeUnit.valueOf((String) jComboBox_time.getSelectedItem()));
-		instructions.get(2).setParameter(dir);
-		
-		currentphase.setInstructions(instructions);
+		if(instructions != null){
+			if(instructions.size()>0){
+				instructions.get(0).setParameter(jTextField_rate.getText());
+				instructions.get(1).setParameter(jTextField_time.getText());
+				InstructionTimeUnit unit = getUnit();
+				((TimeInstruction) instructions.get(1)).setUnit(unit);
+				instructions.get(2).setParameter(dir);
+				
+				currentphase.setInstructions(instructions);
+			} 
+		}
+	}
+	
+	private InstructionTimeUnit getUnit(){
+		String s = (String) jComboBox_time.getSelectedItem();
+		if(s.equals(InstructionTimeUnit.HOUR.getName())){
+			return InstructionTimeUnit.HOUR;
+		} else if(s.equals(InstructionTimeUnit.SEC.getName())){
+			return InstructionTimeUnit.SEC;
+		} else {
+			return InstructionTimeUnit.MIN;
+		}
 	}
 
 	@Override
 	public void setInstructions() {
-		instructions.add(new Instruction("RAT",jTextField_rate.getText()));
-		instructions.add(new TimeInstruction(InstructionTimeUnit.MIN,Double.parseDouble(jTextField_time.getText()),Double.parseDouble(jTextField_rate.getText())));
-		instructions.add(new Instruction("DIR",dir));
+		if(instructions != null){
+			instructions.add(new Instruction("RAT",jTextField_rate.getText()));
+			instructions.add(new TimeInstruction(InstructionTimeUnit.MIN,Double.parseDouble(jTextField_time.getText()),Double.parseDouble(jTextField_rate.getText())));
+			instructions.add(new Instruction("DIR",dir));
+		} else {
+			instructions = new ArrayList<Instruction>();
+			instructions.add(new Instruction("RAT",jTextField_rate.getText()));
+			instructions.add(new TimeInstruction(InstructionTimeUnit.MIN,Double.parseDouble(jTextField_time.getText()),Double.parseDouble(jTextField_rate.getText())));
+			instructions.add(new Instruction("DIR",dir));
+		}
 	}
 
 	@Override

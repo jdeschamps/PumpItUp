@@ -21,7 +21,6 @@ public class EventFunctionPanel extends FunctionPanel {
      * Creates new form RateFunctionPanel
      */
     public EventFunctionPanel() {
-        initComponents();
     }
 
     /**
@@ -31,7 +30,7 @@ public class EventFunctionPanel extends FunctionPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    protected void initComponents() {
 
         jLabel_trigger = new javax.swing.JLabel();
         jComboBox_edge = new javax.swing.JComboBox();

@@ -21,7 +21,6 @@ public class LoopToPreviousFunctionPanel extends FunctionPanel {
      * Creates new form RateFunctionPanel
      */
     public LoopToPreviousFunctionPanel() {
-        initComponents();
     }
 
     /**
@@ -31,7 +30,7 @@ public class LoopToPreviousFunctionPanel extends FunctionPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    protected void initComponents() {
 
         jLabel_loop = new javax.swing.JLabel();
         SpinnerNumberModel model1 = new SpinnerNumberModel(1, 1, 99, 1);  

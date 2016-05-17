@@ -17,7 +17,6 @@ public class EmptyFunctionPanel extends FunctionPanel {
      * Creates new form RateFunctionPanel
      */
     public EmptyFunctionPanel() {
-        initComponents();
     }
 
     /**
@@ -27,7 +26,7 @@ public class EmptyFunctionPanel extends FunctionPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    protected void initComponents() {
 
         jLabel_nosettings = new javax.swing.JLabel();
 
