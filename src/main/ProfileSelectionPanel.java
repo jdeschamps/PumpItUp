@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.DefaultComboBoxModel;
@@ -17,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -271,6 +274,7 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
         jButton_addphase.setText("+");
         jButton_addphase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	System.out.println("add phase triggered");
             	addPhase();
             }
         });
@@ -278,17 +282,34 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
         jButton_removephase.setText("-");
         jButton_removephase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	System.out.println("remove phase triggered");
+
 				removePhase();
             }
         });
+        
 
-        jList_phases.addListSelectionListener(new ListSelectionListener(){
+        jList_phases.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                if (SwingUtilities.isLeftMouseButton(evt) && evt.getClickCount() == 1) {
+                    if (jList_phases.getSelectedIndex() != -1) {
+                        int index = jList_phases.locationToIndex(evt.getPoint());
+                        System.out.println("You clicked item  @ " + index);
+                    }
+                }
+            }
+        });
+        
+      /*  jList_phases.addListSelectionListener(new ListSelectionListener(){
         	public void valueChanged(ListSelectionEvent e){
         		if (e.getValueIsAdjusting() == false){
+        	    	System.out.println("phase list action triggered");
+
         			setPhase(jList_phases.getSelectedIndex());
         		}
         	}
-        });
+        });*/
         jScrollPane2.setViewportView(jList_phases);
 
         jLabel_phases.setText("Phases:");
@@ -296,6 +317,7 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
         jButton_moveup.setText("^");
         jButton_moveup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	System.out.println("move up phase triggered");
 	            movePhaseUp();
             }
         });
@@ -303,6 +325,7 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
         jButton_movedown.setText("v");
         jButton_movedown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	System.out.println("move down phase triggered");
             	movePhaseDown();
             }
         });
@@ -508,13 +531,18 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     
     public void removePhase(){
    		controller.removePhase();
+
+    	System.out.println("remove");
    		listPhases.remove(jList_phases.getSelectedIndex());
     	//updatePhaseList();	
     } 
     
     public void addPhase(){
+    	System.out.println("add");
     	controller.addPhase();
-    	updatePhaseList();	
+    	String[] s = controller.getPhaseList();
+    	listPhases.addElement(s[s.length-1]);
+    	//updatePhaseList();	
     }
     
     public void movePhaseUp(){
@@ -526,18 +554,23 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     
     public void movePhaseDown(){
     	controller.movePhaseDown();
-    	moveDownEntry(listPhases,jList_phases.getSelectedIndex());
+    	int index =jList_phases.getSelectedIndex();
+    	moveDownEntry(listPhases,index);
+    	jList_phases.setSelectedIndex(index+1);
     	//exchangeEntries(listPhases,jList_phases.getSelectedIndex(),jList_phases.getSelectedIndex()+1);
     	//updatePhaseList();	
     }
     
     public void renameObjectList(DefaultListModel list, int i, String name){
+    	System.out.println("rename");
     	if(i>0 && i<list.size()){
     		list.set(i, name);
     	}
     }
     
     public void moveUpEntry(DefaultListModel list, int i){
+
+    	System.out.println("move up");
     	if(i>0 && i<list.size()){
     		Object o = list.remove(i-1);
     		list.add(i,o);
@@ -545,13 +578,17 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     }
     
     public void moveDownEntry(DefaultListModel list, int i){
+    	System.out.println("move down");
     	if(i>=0 && i<list.size()-1){
     		Object o = list.remove(i+1);
     		list.add(i,o);
+    		
     	}
     }
    
     public void exchangeEntries(DefaultListModel list, int i, int j){
+    	System.out.println("exchange");
+
     	if(i!=j){
     		if((i>=0 && i<list.size()) && (j>=0 && j<list.size())){
 	    									// [...; i ; ~~~ ; j ; ...] or [...; j ; ~~~ ; i ; ...] 
@@ -586,6 +623,8 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
    
     
     public void updatePumpList(){
+    	System.out.println("update");
+    	
     	listPumps.clear();
     	int n = controller.getNumberPumps();
     	String[] s = controller.getPumpList();
@@ -612,6 +651,8 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     }
     
     public boolean arePhasesOutDated(){
+    	System.out.println("are outdate?");
+
     	String[] s = controller.getPhaseList();
     	if(listPhases.getSize()!=s.length){
     		return true;
@@ -635,6 +676,8 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     }
     
     public void setPhase(int i){
+    	System.out.println("set phase");
+
     	controller.setCurrentPhase(i);
     	//updatePhaseList();
     	fillPhaseProperties();
@@ -648,12 +691,16 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     }
     
     private void fillPhaseProperties(){
+    	System.out.println("fill phase properties");
+
         jPanel_phaseproperties.setBorder(javax.swing.BorderFactory.createTitledBorder(controller.getPhaseFunction()));
         jComboBox_function.setSelectedItem(controller.getPhaseFunction());
         setSelectedFunction(controller.getCurrentPhase());
     }
     
 	private void setSelectedFunction(Phase p) { // when selecting the phase	
+    	System.out.println("set selected function");
+
 		CardLayout cl = (CardLayout)(jPanel_cardlayout.getLayout());
 	    cl.show(jPanel_cardlayout, getCardName(p.getFunction()));
 	    getPanelCard(getCardName(p.getFunction())).setPhase(p);
