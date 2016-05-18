@@ -490,7 +490,8 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     //////////////////////////////////////////////////////////////////////// modify phase
     public void setFunction(String fun){
     	controller.setFunction(fun);
-    	updatePhaseList();
+    	//updatePhaseList();
+    	renameObjectList(listPhases,jList_phases.getSelectedIndex(),fun);
     	setSelectedFunction(controller.getCurrentPhase());
     }
     
@@ -530,20 +531,23 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     	//updatePhaseList();	
     }
     
+    public void renameObjectList(DefaultListModel list, int i, String name){
+    	if(i>0 && i<list.size()){
+    		list.set(i, name);
+    	}
+    }
+    
     public void moveUpEntry(DefaultListModel list, int i){
     	if(i>0 && i<list.size()){
-    		Object o = list.remove(i);
-    		list.add(i-1,o);
-    		System.out.println(arePhasesOutDated());
+    		Object o = list.remove(i-1);
+    		list.add(i,o);
     	}
     }
     
     public void moveDownEntry(DefaultListModel list, int i){
     	if(i>=0 && i<list.size()-1){
-    		Object o = list.remove(i);
-    		list.add(i+1,o);
-    		System.out.println(arePhasesOutDated());
-
+    		Object o = list.remove(i+1);
+    		list.add(i,o);
     	}
     }
    
@@ -626,13 +630,13 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     ///////////////////////////////////// move to (pump, phase)
     public void setPump(int i){
     	controller.setCurrentPump(i);
-    	controller.setCurrentPhase(0);
     	fillPumpProperties();
-    	fillPhaseProperties();
+    	setPhase(0);
     }
     
     public void setPhase(int i){
     	controller.setCurrentPhase(i);
+    	//updatePhaseList();
     	fillPhaseProperties();
     }
   
@@ -653,7 +657,6 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
 		CardLayout cl = (CardLayout)(jPanel_cardlayout.getLayout());
 	    cl.show(jPanel_cardlayout, getCardName(p.getFunction()));
 	    getPanelCard(getCardName(p.getFunction())).setPhase(p);
-	    System.out.println("Selected function: "+p.getFunction()+" "+getCardName(p.getFunction()));
 	} 
 	
 	
