@@ -125,7 +125,7 @@ public class MainPanel extends javax.swing.JPanel {
         //////////////////////////////////////////////////////////////////////////
         //////////////////////////////////// Profiles
         listprofileAvailable = new DefaultListModel();
-        fillList(listprofileAvailable);
+        fillListProfiles();
    
         listPumps = new DefaultListModel();
 
@@ -150,11 +150,13 @@ public class MainPanel extends javax.swing.JPanel {
         jList_profile.addListSelectionListener(new ListSelectionListener(){
         	public void valueChanged(ListSelectionEvent e){
         		if (e.getValueIsAdjusting() == false){
-        			Profile p = controller.getProfileFromList(jList_profile.getSelectedIndex());
-        			controller.setCurrentProfile(p);
-        			jTextField_name.setText(p.getName());
-        			jTextField_number.setText(String.valueOf(p.getNumberPumps()));
-        			fillList(listPumps);
+        			if(controller.hasProfile(jList_profile.getSelectedIndex())){
+	        			Profile p = controller.getProfileFromList(jList_profile.getSelectedIndex());
+	        			controller.setCurrentProfile(p);
+	        			jTextField_name.setText(p.getName());
+	        			jTextField_number.setText(String.valueOf(p.getNumberPumps()));
+	        			fillListPumps();
+        			}
         		}
         	}
         });
@@ -164,24 +166,18 @@ public class MainPanel extends javax.swing.JPanel {
         jButton_newprofile.setText("+");
         jButton_newprofile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	JFrame frame = new JFrame();
             	controller.setCurrentProfile(new Profile());
-            	frame.add(new ProfileSelectionPanel(controller));
-            	frame.pack();
-            	frame.setVisible(true);
+            	profileSelection();
             }
         });
 
         jButton_modifyprofile.setText("~");
         jButton_modifyprofile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	JFrame frame = new JFrame();
             	if(jList_profile.getSelectedIndex()==-1){
                 	controller.setCurrentProfile(new Profile());
             	} 
-        		frame.add(new ProfileSelectionPanel(controller));
-            	frame.pack();
-            	frame.setVisible(true);
+            	profileSelection();
             }
         });
 
@@ -273,12 +269,20 @@ public class MainPanel extends javax.swing.JPanel {
                 .addComponent(jPanel_controls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }
-    
-    private void fillList(DefaultListModel list) {
-    	list.clear();
+
+    private void fillListProfiles() {
+    	listprofileAvailable.clear();
         String[] availableprofiles = controller.getStringProfiles();
      	for(int i=0;i<availableprofiles.length;i++){
-     		list.add(i, availableprofiles[i]);
+     		listprofileAvailable.add(i, availableprofiles[i]);
+     	}		
+	}
+
+    private void fillListPumps() {
+    	listPumps.clear();
+        String[] availablepumps = controller.getPumpList();
+     	for(int i=0;i<availablepumps.length;i++){
+     		listPumps.add(i, availablepumps[i]);
      	}		
 	}
 
@@ -291,11 +295,27 @@ public class MainPanel extends javax.swing.JPanel {
     	if (result == JFileChooser.APPROVE_OPTION) {
     	    File selectedFile = fileChooser.getSelectedFile();
     	    controller.loadNewProfile(selectedFile);
-    	    fillList(listprofileAvailable);
+    	    fillListProfiles();
     	    jList_profile.setSelectedIndex(listprofileAvailable.size()-1);
     	}
 	}
 
+	private void profileSelection(){
+		selectionFrame = new JFrame();
+		selectionFrame.add(new ProfileSelectionPanel(controller, this));
+		selectionFrame.pack();
+		selectionFrame.setVisible(true);
+	}
+
+	public void closeProfileSelection(){
+		if(selectionFrame != null){
+			selectionFrame.setVisible(false);
+			selectionFrame.dispose();
+			
+			fillListProfiles();
+		}
+	}
+	
 	private javax.swing.JButton jButton_addprofile;
     private javax.swing.JButton jButton_modifyprofile;
     private javax.swing.JButton jButton_newprofile;
@@ -319,5 +339,7 @@ public class MainPanel extends javax.swing.JPanel {
     
     private DefaultListModel listprofileAvailable;
     private DefaultListModel listPumps;
+    
+    private JFrame selectionFrame;
     // End of variables declaration//GEN-END:variables
 }

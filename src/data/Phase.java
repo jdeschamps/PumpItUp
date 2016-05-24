@@ -1,8 +1,9 @@
 package data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Phase {
+public class Phase implements Serializable{
 	
 	private Function function = Function.STP;
 	private String parameter = "";

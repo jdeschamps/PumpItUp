@@ -45,7 +45,7 @@ public class Profile implements Serializable{
 	}
 	
 	public void setName(String s){
-		this.name = name;
+		this.name = s;
 	}
 	
 	public int getNumberPumps(){

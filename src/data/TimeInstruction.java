@@ -1,6 +1,8 @@
 package data;
 
-public class TimeInstruction extends Instruction{
+import java.io.Serializable;
+
+public class TimeInstruction extends Instruction  implements Serializable{
 
 	private InstructionTimeUnit unit;			
 	private double time;

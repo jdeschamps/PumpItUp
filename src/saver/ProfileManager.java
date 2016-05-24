@@ -9,6 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import com.sun.org.apache.xml.internal.utils.NSInfo;
+
 import data.Profile;
 
 public class ProfileManager {
@@ -27,6 +29,11 @@ public class ProfileManager {
 		        return name.toLowerCase().endsWith(".piuprofile");
 		    }
 		});	
+		System.out.println("found "+files.length+" profiles");
+		for(int i=0;i<files.length;i++){
+			System.out.println("read "+files[i].getName());
+			readProfile(files[i].getPath());
+		}
 	}
 	
 	public void addProfile(Profile p){
@@ -45,20 +52,29 @@ public class ProfileManager {
 			String[] s = new String[i];
 			
 			for(int j=0;j<i;j++){
-				s[j] = profiles.get(j).getName(); 
+				String profilename = profiles.get(j).getName();
+				if(profilename.contains(".piuprofile")){
+					s[j] = profilename.substring(0, profilename.length()-11);
+				} else {
+					s[j] = profilename; 
+				}
 			}
+			return s;
 		}
 		
 		return def;
 	}
 	
 	public Profile getProfile(int i){
-		return profiles.get(i);
+		if(i>=0 && i<profiles.size()){
+			return profiles.get(i);
+		}
+		return null;
 	}
 	
-	public void saveProfile(Profile p){
+	public void saveProfile(File f, Profile p){
 		try {
-			FileOutputStream f_out = new FileOutputStream(System.getProperty("user.dir")+"/PIU_profiles/"+p.getName()+".piuprofile");
+			FileOutputStream f_out = new FileOutputStream(f);
 			ObjectOutputStream obj_out;
 
 			obj_out = new ObjectOutputStream (f_out);
@@ -66,6 +82,8 @@ public class ProfileManager {
 			obj_out.writeObject (p);
 
 			obj_out.close();
+			
+			profiles.add(p);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -85,6 +103,7 @@ public class ProfileManager {
 			obj_in.close();
 			
 			if (obj instanceof Profile){
+				System.out.println("Add profile "+((Profile) obj).getName());
 				profiles.add((Profile) obj);
 			}
 			

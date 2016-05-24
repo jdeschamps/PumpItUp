@@ -1,8 +1,8 @@
 package data;
 
-import java.util.Collections;
+import java.io.Serializable;
 
-public class Pump {
+public class Pump implements Serializable{
 
 	private String name;
 	private int address;

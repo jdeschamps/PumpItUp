@@ -1,9 +1,10 @@
 package data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Program {
+public class Program implements Serializable{
 
 	private ArrayList<Phase> phases;
 	

@@ -1,7 +1,9 @@
 package data;
 
 import java.io.File;
+
 import saver.ProfileManager;
+import main.MainPanel;
 import mmcorej.CMMCore;
 
 public class Controller {
@@ -176,10 +178,21 @@ public class Controller {
 		}
 		return profile;
 	}
+	
+	public boolean hasProfile(int index){
+		if(index>=0 && index<getNumberProfiles()){
+			return true;
+		}
+		return false;
+	}
 
-	public void saveCurrentProfile(String s){
-		profile.setName(s);
-		manager.saveProfile(profile);
+	public void saveCurrentProfile(File f){
+		if(f.getName().contains(".piuprofile")){
+			profile.setName(f.getName().substring(0, f.getName().length()-1-11));
+		} else {
+			profile.setName(f.getName());
+		}
+		manager.saveProfile(f, profile);
 	}
 	
 	public int getNumberProfiles(){

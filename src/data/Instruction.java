@@ -1,6 +1,8 @@
 package data;
 
-public class Instruction {
+import java.io.Serializable;
+
+public class Instruction implements Serializable {
 
 	protected String command;
 	protected String param;

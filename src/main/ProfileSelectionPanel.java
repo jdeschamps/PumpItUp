@@ -46,9 +46,11 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
 
 	private Controller controller;
 	private boolean newProfile;
+	private MainPanel owner;
 
-    public ProfileSelectionPanel(Controller controller) {
+    public ProfileSelectionPanel(Controller controller, MainPanel owner) {
     	this.controller = controller;
+    	this.owner = owner;
     	newProfile = false;
     	    	
     	initComponents();
@@ -295,7 +297,7 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
                 if (SwingUtilities.isLeftMouseButton(evt) && evt.getClickCount() == 1) {
                     if (jList_phases.getSelectedIndex() != -1) {
                         int index = jList_phases.locationToIndex(evt.getPoint());
-                        System.out.println("You clicked item  @ " + index);
+                        setPhase(index);
                     }
                 }
             }
@@ -428,8 +430,9 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
             	int userSelection = fileChooser.showSaveDialog(new JFrame());
             	 
             	if (userSelection == JFileChooser.APPROVE_OPTION) {
-            	    File fileToSave = fileChooser.getSelectedFile();
-            	    controller.saveCurrentProfile(fileToSave.getName());
+            	    File fileToSave = new File(fileChooser.getSelectedFile()+".piuprofile");
+            	    controller.saveCurrentProfile(fileToSave);
+            	    owner.closeProfileSelection();
             	}
             }
         });
@@ -440,7 +443,7 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
         jButton_quit.setVisible(false);
         jButton_quit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	
+            	owner.closeProfileSelection();
             }
         });
 
@@ -514,6 +517,7 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     public void setFunction(String fun){
     	controller.setFunction(fun);
     	//updatePhaseList();
+    	System.out.println(fun);
     	renameObjectList(listPhases,jList_phases.getSelectedIndex(),fun);
     	setSelectedFunction(controller.getCurrentPhase());
     }
@@ -530,10 +534,11 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     }
     
     public void removePhase(){
-   		controller.removePhase();
-
-    	System.out.println("remove");
-   		listPhases.remove(jList_phases.getSelectedIndex());
+	    if(jList_phases.getSelectedIndex()!=-1){
+	   		controller.removePhase();
+	    	System.out.println("remove");
+	   		listPhases.remove(jList_phases.getSelectedIndex());
+	    }
     	//updatePhaseList();	
     } 
     
@@ -563,9 +568,9 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     
     public void renameObjectList(DefaultListModel list, int i, String name){
     	System.out.println("rename");
-    	if(i>0 && i<list.size()){
+    	if(i>=0 && i<list.size()){
     		list.set(i, name);
-    	}
+    	} 
     }
     
     public void moveUpEntry(DefaultListModel list, int i){
@@ -672,14 +677,13 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
     public void setPump(int i){
     	controller.setCurrentPump(i);
     	fillPumpProperties();
+    	updatePhaseList();
     	setPhase(0);
     }
     
     public void setPhase(int i){
     	System.out.println("set phase");
-
     	controller.setCurrentPhase(i);
-    	//updatePhaseList();
     	fillPhaseProperties();
     }
   

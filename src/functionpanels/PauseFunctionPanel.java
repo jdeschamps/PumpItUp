@@ -111,7 +111,7 @@ public class PauseFunctionPanel extends FunctionPanel {
 
 	@Override
 	public void updatePhase() {
-		this.currentphase.setParameter(String.valueOf((Double) jSpinner_pause.getValue()));
+		this.currentphase.setParameter(String.valueOf(jSpinner_pause.getValue()));
 	}
 
 	@Override
