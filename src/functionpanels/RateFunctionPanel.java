@@ -167,12 +167,13 @@ public class RateFunctionPanel extends FunctionPanel {
 	public void setPhase(Phase p) {
 		if(p.getFunction().equals(possibleFunction[0]) || p.getFunction().equals(possibleFunction[1]) || p.getFunction().equals(possibleFunction[2])){
 			this.currentphase = p;
-			if(!p.getInstructions().isEmpty()){
+			if(!currentphase.getInstructions().isEmpty() && p.getInstructions().size()==3){
+				System.out.println("Instructions are not empty in the phase");
 				try{
-					jTextField_rate.setText(p.getInstructions().get(0).getParameter());
-					jTextField_time.setText(p.getInstructions().get(1).getParameter());
-					jComboBox_time.setSelectedItem(((TimeInstruction) p.getInstructions().get(1)).getUnit().getName());
-					dir = p.getInstructions().get(2).getParameter();
+					jTextField_rate.setText(currentphase.getInstructions().get(0).getParameter());
+					jTextField_time.setText(currentphase.getInstructions().get(1).getParameter());
+					jComboBox_time.setSelectedItem(((TimeInstruction) currentphase.getInstructions().get(1)).getUnit().getName());
+					dir = currentphase.getInstructions().get(2).getParameter();
 					if(dir.equals("INF")){
 						jToggleButton_infuse.setSelected(true);
 					} else if(dir.equals("WDR")){
@@ -181,6 +182,8 @@ public class RateFunctionPanel extends FunctionPanel {
 				} catch(Exception e){
 				}
 			} else {
+				System.out.println("Instructions are empty in the phase: "+currentphase.getInstructions().isEmpty());
+
 				jTextField_rate.setText("0");
 				jTextField_time.setText("0");
 				jComboBox_time.setSelectedIndex(1);
@@ -194,11 +197,15 @@ public class RateFunctionPanel extends FunctionPanel {
 	public void updatePhase() {
 		if(instructions != null){
 			if(instructions.size()>0){
+				System.out.println("Update phase");
+				
 				instructions.get(0).setParameter(jTextField_rate.getText());
 				instructions.get(1).setParameter(jTextField_time.getText());
 				InstructionTimeUnit unit = getUnit();
 				((TimeInstruction) instructions.get(1)).setUnit(unit);
 				instructions.get(2).setParameter(dir);
+				
+				System.out.println("Size of instructions "+instructions.size());
 				
 				currentphase.setInstructions(instructions);
 			} 

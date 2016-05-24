@@ -30,9 +30,12 @@ public class Phase implements Serializable{
 	}
 
 	public void setFunction(String s){
-		function = Function.valueOf(s);
-		instructions.clear();
-		parameter = "";
+		if(!s.equals(function.getName())){
+			function = Function.valueOf(s);
+			System.out.println("Clear instructions");
+			instructions.clear();
+			parameter = "";
+		}
 	}
 	
 	public String getFunction(){
@@ -57,6 +60,7 @@ public class Phase implements Serializable{
 	
 	public ArrayList<Instruction> getInstructions(){
 		if(instructions == null){
+			System.out.println("instructions from phase is null");
 			instructions = new ArrayList<Instruction>();
 			instructions.add(new Instruction("",""));
 		}
