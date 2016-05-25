@@ -53,8 +53,10 @@ public class PauseFunctionPanel extends FunctionPanel {
         jComboBox_format.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	if(jComboBox_format.getSelectedIndex()==0){
+            		System.out.println("set model 2");
             		jSpinner_pause.setModel(model2);
             	} else {
+            		System.out.println("set model 1");
             		jSpinner_pause.setModel(model1);
             	}
             }
@@ -101,17 +103,51 @@ public class PauseFunctionPanel extends FunctionPanel {
 	public void setPhase(Phase p) {
 		if(p.getFunction().equals(possibleFunction[0])){
 			this.currentphase = p;
-			int param=0;
 			try{
-				param = Integer.parseInt(p.getCommand().substring(3, 3));
+				setValueToSpinner(p.getParameter());
 			} catch (Exception e){}
-			jSpinner_pause.setValue(param);			/////////////////// here it might go wrong, check the behavior
+		}
+	}
+	
+	private void setValueToSpinner(String val){
+		int length = val.length();
+		switch(length){
+		case 1:
+			jComboBox_format.setSelectedIndex(0);
+    		//jSpinner_pause.setModel(model2);
+			jSpinner_pause.setValue(Integer.parseInt(val));
+			break;
+		case 2:
+			jComboBox_format.setSelectedIndex(0);
+    		//jSpinner_pause.setModel(model2);
+			jSpinner_pause.setValue(Integer.parseInt(val));
+			break;
+		case 3:
+			if(val.substring(1, 2).equals(".")){
+				jComboBox_format.setSelectedIndex(1);
+        		//jSpinner_pause.setModel(model1);
+				jSpinner_pause.setValue(Double.parseDouble(val));
+			}
+			break;
+		}
+	}
+	
+	private String getValueFromSpinner(){
+		String s = String.valueOf(jSpinner_pause.getValue());
+		if(s.length()>2){
+			if(s.substring(1, 2).equals(".")){
+				return s.substring(0, 3);
+			} else {
+				return s.substring(0, 2);
+			}
+		} else { // length<=2
+			return s;
 		}
 	}
 
 	@Override
 	public void updatePhase() {
-		this.currentphase.setParameter(String.valueOf(jSpinner_pause.getValue()));
+		this.currentphase.setParameter(getValueFromSpinner());
 	}
 
 	@Override

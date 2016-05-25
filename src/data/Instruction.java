@@ -21,7 +21,7 @@ public class Instruction implements Serializable {
 	}
 	
 	public String getCommand(){
-		return command+param;
+		return command;
 	}
 }
 

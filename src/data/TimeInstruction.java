@@ -56,8 +56,13 @@ public class TimeInstruction extends Instruction  implements Serializable{
 	}
 	@Override
 	public String getCommand(){
+		return command;
+	}
+	
+	@Override
+	public String getParameter(){
 		System.out.println("Volume calc: "+rate+" "+getTimeMin()+" = "+getVolume());
-		return command+getVolume();
+		return String.valueOf(getVolume());
 	}
 	
 	boolean isDouble(String str) {

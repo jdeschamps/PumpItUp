@@ -75,7 +75,7 @@ public class ProfileManager {
 	public void saveProfile(File f, Profile p){
 		try {
 			FileOutputStream f_out = new FileOutputStream(f);
-			ObjectOutputStream obj_out;
+		  	ObjectOutputStream obj_out;
 
 			obj_out = new ObjectOutputStream (f_out);
 			

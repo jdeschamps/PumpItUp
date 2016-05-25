@@ -14,6 +14,11 @@ public class Profile implements Serializable{
 		pumps.add(new Pump(0));
 	}
 
+	public Profile(Profile p){
+		this.name = p.getName();
+		this.pumps = p.getPumps();
+	}
+
 	public Profile(String name){
 		this.name = name;
 		this.pumps = new ArrayList<Pump>();

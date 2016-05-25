@@ -212,7 +212,9 @@ public class MainPanel extends javax.swing.JPanel {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	if(jList_profile.getSelectedIndex()==-1){
                 	controller.setCurrentProfile(new Profile());
-            	} 
+            	} else {
+            		controller.setCurrentProfile(new Profile(controller.getCurrentProfile()));
+            	}
             	profileSelection();
             }
         });
@@ -321,16 +323,18 @@ public class MainPanel extends javax.swing.JPanel {
 	    		}
 	    	}
 	    	
+	    	m++;
 	    	String[][] data = new String[m][npumps+1];
 	    	for(int i=1;i<=npumps;i++){
 	    		Pump pu = p.getPump(i-1);
-	    		for(int j=0;j<m;j++){
-	    			if(pu.hasPhase(j)){
-	    				data[j][i] = "FUN "+pu.getPhase(j).getFunction()+" "+pu.getPhase(j).getParameter()+"\n";
-	    				if(pu.getPhase(j).getNumberInstructions()>0){
-	    					ArrayList<Instruction> ins = pu.getPhase(j).getInstructions();
+	    		data[0][i] = String.valueOf(pu.getAddress());
+	    		for(int j=1;j<m;j++){
+	    			if(pu.hasPhase(j-1)){
+	    				data[j][i] = "FUN "+pu.getPhase(j-1).getFunction()+" "+pu.getPhase(j-1).getParameter()+"\n";
+	    				if(pu.getPhase(j-1).getNumberInstructions()>0){
+	    					ArrayList<Instruction> ins = pu.getPhase(j-1).getInstructions();
 	    					for(int k=0;k<ins.size();k++){
-	    						data[j][i] += ins.get(k).getCommand()+"\n";
+	    						data[j][i] += ins.get(k).getCommand()+" "+ins.get(k).getParameter()+"\n";
 	    					}
 	    				}
 	    			} else {
@@ -338,7 +342,8 @@ public class MainPanel extends javax.swing.JPanel {
 	    			}
 	    		}
 	    	}
-	    	for(int j=0;j<m;j++){
+	    	data[0][0] = "Address";
+	    	for(int j=1;j<m;j++){
 	    		data[j][0] = "Phase"+j;
 	    	}
 	    	System.out.println("Set new table model");

@@ -16,7 +16,12 @@ public class Controller {
 	private int currentPhase = 0;
 	
 	private static String run = "Run Pump";
-	
+	private static String vol = "Volume (uL) Pump";
+	private static String rate = "Rate (uL/min) Pump";
+	private static String diam = "Diameter (mm) Pump";
+	private static String phase = "Phase Pump";
+	private static String func = "Function Pump";
+	private static String dir = "Direction Pump";
 	
 	public Controller(CMMCore core){
 		this.core = core;
@@ -235,18 +240,30 @@ public class Controller {
 			e.printStackTrace();
 		}
 	}
+	
+	public String getProperty(String prop){
+		if(prop.equals("RAT")){
+			return rate;
+		} else if(prop.equals("VOL")){
+			return vol;
+		} else if(prop.equals("DIR")){
+			return dir;
+		}
+		return "";
+	}
 
 	public void setPhase(int i, Pump p, Phase ph){
-		setProperty("Phase Pump"+p.getAddress(),i);
-		setProperty("Function Pump"+p.getAddress(),"FUN"+ph.getCommand());
+		setProperty(phase+p.getAddress(),i);
+		setProperty(func+p.getAddress(),ph.getCommand());
 		for(int j=0;j<ph.getNumberInstructions();j++){
-			setProperty(ph.getInstructions().get(j).getCommand()+" Pump"+p.getAddress(),ph.getInstructions().get(j).getParameter());
+			setProperty(getProperty(ph.getInstructions().get(j).getCommand())+p.getAddress(),ph.getInstructions().get(j).getParameter());
 		}
 	}
 	
 	public void startPumps(){
 		// send program
 		for(int i=0;i<getNumberPumps();i++){
+			setProperty(diam+i,getPump(i).getDiameter());
 			for(int j=0;j<getNumberPhases(i);j++){
 				setPhase(j, getPump(i),getPhase(i,j));
 			}
