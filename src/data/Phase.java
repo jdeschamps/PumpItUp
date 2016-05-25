@@ -58,6 +58,10 @@ public class Phase implements Serializable{
 		return function+parameter;
 	}
 	
+	public String getParameter(){
+		return parameter;
+	}
+	
 	public ArrayList<Instruction> getInstructions(){
 		if(instructions == null){
 			System.out.println("instructions from phase is null");

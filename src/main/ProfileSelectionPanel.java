@@ -430,8 +430,13 @@ public class ProfileSelectionPanel extends javax.swing.JPanel {
             	int userSelection = fileChooser.showSaveDialog(new JFrame());
             	 
             	if (userSelection == JFileChooser.APPROVE_OPTION) {
-            	    File fileToSave = new File(fileChooser.getSelectedFile()+".piuprofile");
-            	    controller.saveCurrentProfile(fileToSave);
+            		File fileToSave;
+            		if(!fileChooser.getSelectedFile().getName().contains(".piuprofile")){
+            			fileToSave = new File(fileChooser.getSelectedFile()+".piuprofile");
+            		} else {
+            			fileToSave = fileChooser.getSelectedFile();
+            		}
+            		controller.saveCurrentProfile(fileToSave);
             	    owner.closeProfileSelection();
             	}
             }

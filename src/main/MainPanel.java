@@ -4,17 +4,34 @@
  */
 package main;
 
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import data.Controller;
+import data.Instruction;
 import data.Profile;
+import data.Program;
+import data.Pump;
 
 /**
  *
@@ -72,7 +89,7 @@ public class MainPanel extends javax.swing.JPanel {
         jButton_stop.setText("Stop");
         jButton_stop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	controller.startPumps();
+            	controller.stopPumps();
             }
         });
         
@@ -110,7 +127,11 @@ public class MainPanel extends javax.swing.JPanel {
 
         //////////////////////////////////////////////////////////////////////////
         //////////////////////////////////// Graph
-        javax.swing.GroupLayout jPanel_graphLayout = new javax.swing.GroupLayout(jPanel_graph);
+
+        tableModel = new DefaultTableModel();
+        table = new JTable(tableModel);
+        jPanel_graph.add(new JScrollPane(table));
+   /*     javax.swing.GroupLayout jPanel_graphLayout = new javax.swing.GroupLayout(jPanel_graph);
         jPanel_graph.setLayout(jPanel_graphLayout);
         jPanel_graphLayout.setHorizontalGroup(
             jPanel_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,7 +140,7 @@ public class MainPanel extends javax.swing.JPanel {
         jPanel_graphLayout.setVerticalGroup(
             jPanel_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 275, Short.MAX_VALUE)
-        );
+        );*/
 
         
         //////////////////////////////////////////////////////////////////////////
@@ -143,6 +164,18 @@ public class MainPanel extends javax.swing.JPanel {
         jTextField_length.setText("");
 
         jList_pumps.setModel(listPumps);
+     /*   jList_pumps.addMouseListener( new MouseAdapter()
+        {
+           public void mousePressed(MouseEvent e)
+           {
+               if ( SwingUtilities.isRightMouseButton(e) )
+               {
+                   
+               }
+           }
+        });*/
+        
+        
         jScrollPane2.setViewportView(jList_pumps);
 
         jList_profile.setModel(listprofileAvailable);
@@ -152,10 +185,13 @@ public class MainPanel extends javax.swing.JPanel {
         		if (e.getValueIsAdjusting() == false){
         			if(controller.hasProfile(jList_profile.getSelectedIndex())){
 	        			Profile p = controller.getProfileFromList(jList_profile.getSelectedIndex());
-	        			controller.setCurrentProfile(p);
-	        			jTextField_name.setText(p.getName());
-	        			jTextField_number.setText(String.valueOf(p.getNumberPumps()));
-	        			fillListPumps();
+	        			if(p!=null){
+		        			controller.setCurrentProfile(p);
+		        			jTextField_name.setText(p.getName());
+		        			jTextField_number.setText(String.valueOf(p.getNumberPumps()));
+		        			fillListPumps();
+		        			fillTable();
+	        			}
         			}
         		}
         	}
@@ -269,6 +305,47 @@ public class MainPanel extends javax.swing.JPanel {
                 .addComponent(jPanel_controls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }
+    
+    private void fillTable(){
+    	int npumps = controller.getNumberPumps();
+    	if(npumps>0){
+	    	Profile p = controller.getCurrentProfile();
+	    	
+	    	int m = 0;
+	    	String[] columnsName = new String[npumps+1];
+	    	columnsName[0] = "Phase";
+	    	for(int i=1;i<=npumps;i++){
+	    		columnsName[i]=p.getPump(i-1).getName();
+	    		if(p.getPump(i-1).getNumberPhases()>m){
+	    			m = p.getPump(i-1).getNumberPhases();
+	    		}
+	    	}
+	    	
+	    	String[][] data = new String[m][npumps+1];
+	    	for(int i=1;i<=npumps;i++){
+	    		Pump pu = p.getPump(i-1);
+	    		for(int j=0;j<m;j++){
+	    			if(pu.hasPhase(j)){
+	    				data[j][i] = "FUN "+pu.getPhase(j).getFunction()+" "+pu.getPhase(j).getParameter()+"\n";
+	    				if(pu.getPhase(j).getNumberInstructions()>0){
+	    					ArrayList<Instruction> ins = pu.getPhase(j).getInstructions();
+	    					for(int k=0;k<ins.size();k++){
+	    						data[j][i] += ins.get(k).getCommand()+"\n";
+	    					}
+	    				}
+	    			} else {
+	    				data[j][i] = "";
+	    			}
+	    		}
+	    	}
+	    	for(int j=0;j<m;j++){
+	    		data[j][0] = "Phase"+j;
+	    	}
+	    	System.out.println("Set new table model");
+	    	tableModel = new DefaultTableModel(data,columnsName);
+	    	table.setModel(tableModel);
+    	}
+    }
 
     private void fillListProfiles() {
     	listprofileAvailable.clear();
@@ -340,6 +417,8 @@ public class MainPanel extends javax.swing.JPanel {
     private DefaultListModel listprofileAvailable;
     private DefaultListModel listPumps;
     
+    private DefaultTableModel tableModel;
+    private JTable table;
+    
     private JFrame selectionFrame;
-    // End of variables declaration//GEN-END:variables
 }

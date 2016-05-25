@@ -188,7 +188,7 @@ public class Controller {
 
 	public void saveCurrentProfile(File f){
 		if(f.getName().contains(".piuprofile")){
-			profile.setName(f.getName().substring(0, f.getName().length()-1-11));
+			profile.setName(f.getName().substring(0, f.getName().length()-11));
 		} else {
 			profile.setName(f.getName());
 		}
@@ -220,7 +220,7 @@ public class Controller {
 	////////////////////////////////////////////////// Controls
 	public void setProperty(String property, String value){
 		try {
-			//core.setProperty(device, property, value);
+			core.setProperty(device, property, value);
 			System.out.println(property+" "+value);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -229,7 +229,7 @@ public class Controller {
 	
 	public void setProperty(String property, int value){
 		try {
-			//core.setProperty(device, property, value);
+			core.setProperty(device, property, value);
 			System.out.println(property+" "+value);
 		} catch (Exception e) {
 			e.printStackTrace();

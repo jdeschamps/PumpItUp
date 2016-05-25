@@ -202,7 +202,7 @@ public class RateFunctionPanel extends FunctionPanel {
 				instructions.get(0).setParameter(jTextField_rate.getText());
 				instructions.get(1).setParameter(jTextField_time.getText());
 				InstructionTimeUnit unit = getUnit();
-				((TimeInstruction) instructions.get(1)).setUnit(unit);
+				((TimeInstruction) instructions.get(1)).setInstruction(unit, jTextField_rate.getText(), jTextField_time.getText());;
 				instructions.get(2).setParameter(dir);
 				
 				System.out.println("Size of instructions "+instructions.size());

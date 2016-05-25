@@ -15,13 +15,21 @@ public class TimeInstruction extends Instruction  implements Serializable{
 		setRate(rate);
 	}
 
-	public void setUnit(InstructionTimeUnit unit){
+	public void setInstruction(InstructionTimeUnit unit, String rate, String time){
+		if(isDouble(rate) && isDouble(time)){
+			setUnit(unit);
+			setTimeValue(Double.parseDouble(time));
+			setRate(Double.parseDouble(rate));
+		}
+	}
+	
+	private void setUnit(InstructionTimeUnit unit){
 		this.unit = unit;
 	}
-	public void setTimeValue(double time){
+	private void setTimeValue(double time){
 		this.time = time;
 	}
-	public void setRate(double rate){
+	private void setRate(double rate){
 		this.rate = rate;
 	}
 	
@@ -48,6 +56,16 @@ public class TimeInstruction extends Instruction  implements Serializable{
 	}
 	@Override
 	public String getCommand(){
+		System.out.println("Volume calc: "+rate+" "+getTimeMin()+" = "+getVolume());
 		return command+getVolume();
 	}
+	
+	boolean isDouble(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }

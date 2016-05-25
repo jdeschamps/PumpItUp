@@ -83,7 +83,10 @@ public class ProfileManager {
 
 			obj_out.close();
 			
-			profiles.add(p);
+			//reload();
+			if(!profiles.contains(p)){
+				profiles.add(p);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -112,5 +115,10 @@ public class ProfileManager {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void reload(){
+		profiles.clear();
+		searchProfiles();
 	}
 }
