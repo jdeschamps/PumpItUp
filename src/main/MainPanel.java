@@ -59,15 +59,10 @@ public class MainPanel extends javax.swing.JPanel {
         jPanel_controls = new javax.swing.JPanel();
         jButton_start = new javax.swing.JButton();
         jButton_stop = new javax.swing.JButton();
-        jToggleButton_pause = new javax.swing.JToggleButton();
-        jToggleButton_resume = new javax.swing.JToggleButton();
         jPanel_graph = new javax.swing.JPanel();
         jPanel_profile = new javax.swing.JPanel();
         jTextField_name = new javax.swing.JTextField();
-        jLabel_number = new javax.swing.JLabel();
         jTextField_number = new javax.swing.JTextField();
-        jLabel_length = new javax.swing.JLabel();
-        jTextField_length = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList_pumps = new javax.swing.JList();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -76,6 +71,14 @@ public class MainPanel extends javax.swing.JPanel {
         jButton_newprofile = new javax.swing.JButton();
         jButton_modifyprofile = new javax.swing.JButton();
         jButton_addprofile = new javax.swing.JButton();
+        
+
+        jPanel_empty1 = new javax.swing.JPanel();
+        jPanel_empty4 = new javax.swing.JPanel();
+        jPanel_empty6 = new javax.swing.JPanel();
+        jPanel_empty5 = new javax.swing.JPanel();
+        jPanel_empty3 = new javax.swing.JPanel();
+        jPanel_empty2 = new javax.swing.JPanel();
 
         //////////////////////////////////////////////////////////////////////////
         //////////////////////////////////// Controls
@@ -93,44 +96,110 @@ public class MainPanel extends javax.swing.JPanel {
             }
         });
         
-        jToggleButton_pause.setText("||");
-        jToggleButton_pause.setVisible(false);
-        jToggleButton_resume.setText(">");
-        jToggleButton_resume.setVisible(false);
 
-        javax.swing.GroupLayout jPanel_controlsLayout = new javax.swing.GroupLayout(jPanel_controls);
-        jPanel_controls.setLayout(jPanel_controlsLayout);
-        jPanel_controlsLayout.setHorizontalGroup(
-            jPanel_controlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_controlsLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton_start)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton_pause)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton_resume)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_stop)
-                .addGap(169, 169, 169))
+        jPanel_controls.setLayout(new java.awt.GridLayout());
+
+        javax.swing.GroupLayout jPanel_empty1Layout = new javax.swing.GroupLayout(jPanel_empty1);
+        jPanel_empty1.setLayout(jPanel_empty1Layout);
+        jPanel_empty1Layout.setHorizontalGroup(
+            jPanel_empty1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 69, Short.MAX_VALUE)
         );
-        jPanel_controlsLayout.setVerticalGroup(
-            jPanel_controlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_controlsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel_controlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_stop, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_start, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton_resume, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        jPanel_empty1Layout.setVerticalGroup(
+            jPanel_empty1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 31, Short.MAX_VALUE)
         );
 
+        jPanel_controls.add(jPanel_empty1);
+
+        javax.swing.GroupLayout jPanel_empty4Layout = new javax.swing.GroupLayout(jPanel_empty4);
+        jPanel_empty4.setLayout(jPanel_empty4Layout);
+        jPanel_empty4Layout.setHorizontalGroup(
+            jPanel_empty4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 69, Short.MAX_VALUE)
+        );
+        jPanel_empty4Layout.setVerticalGroup(
+            jPanel_empty4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 31, Short.MAX_VALUE)
+        );
+
+        jPanel_controls.add(jPanel_empty4);
+
+        javax.swing.GroupLayout jPanel_empty6Layout = new javax.swing.GroupLayout(jPanel_empty6);
+        jPanel_empty6.setLayout(jPanel_empty6Layout);
+        jPanel_empty6Layout.setHorizontalGroup(
+            jPanel_empty6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 69, Short.MAX_VALUE)
+        );
+        jPanel_empty6Layout.setVerticalGroup(
+            jPanel_empty6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 31, Short.MAX_VALUE)
+        );
+
+        jPanel_controls.add(jPanel_empty6);
+
+        jPanel_controls.add(jButton_start);
+        jPanel_controls.add(jButton_stop);
+
+        javax.swing.GroupLayout jPanel_empty5Layout = new javax.swing.GroupLayout(jPanel_empty5);
+        jPanel_empty5.setLayout(jPanel_empty5Layout);
+        jPanel_empty5Layout.setHorizontalGroup(
+            jPanel_empty5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 69, Short.MAX_VALUE)
+        );
+        jPanel_empty5Layout.setVerticalGroup(
+            jPanel_empty5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 31, Short.MAX_VALUE)
+        );
+
+        jPanel_controls.add(jPanel_empty5);
+
+        javax.swing.GroupLayout jPanel_empty3Layout = new javax.swing.GroupLayout(jPanel_empty3);
+        jPanel_empty3.setLayout(jPanel_empty3Layout);
+        jPanel_empty3Layout.setHorizontalGroup(
+            jPanel_empty3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 69, Short.MAX_VALUE)
+        );
+        jPanel_empty3Layout.setVerticalGroup(
+            jPanel_empty3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 31, Short.MAX_VALUE)
+        );
+
+        jPanel_controls.add(jPanel_empty3);
+
+        javax.swing.GroupLayout jPanel_empty2Layout = new javax.swing.GroupLayout(jPanel_empty2);
+        jPanel_empty2.setLayout(jPanel_empty2Layout);
+        jPanel_empty2Layout.setHorizontalGroup(
+            jPanel_empty2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 69, Short.MAX_VALUE)
+        );
+        jPanel_empty2Layout.setVerticalGroup(
+            jPanel_empty2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 31, Short.MAX_VALUE)
+        );
+
+        jPanel_controls.add(jPanel_empty2);
+        
         //////////////////////////////////////////////////////////////////////////
         //////////////////////////////////// Graph
 
         tableModel = new DefaultTableModel();
         table = new JTable(tableModel);
-        jPanel_graph.add(new JScrollPane(table));
+        JScrollPane js = new JScrollPane(table);
+        
+        javax.swing.GroupLayout jPanel_graphLayout = new javax.swing.GroupLayout(jPanel_graph);
+        jPanel_graph.setLayout(jPanel_graphLayout);
+        jPanel_graphLayout.setHorizontalGroup(
+            jPanel_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(js)
+        );
+        jPanel_graphLayout.setVerticalGroup(
+            jPanel_graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_graphLayout.createSequentialGroup()
+                .addComponent(js, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        
    /*     javax.swing.GroupLayout jPanel_graphLayout = new javax.swing.GroupLayout(jPanel_graph);
         jPanel_graph.setLayout(jPanel_graphLayout);
         jPanel_graphLayout.setHorizontalGroup(
@@ -149,7 +218,7 @@ public class MainPanel extends javax.swing.JPanel {
         fillListProfiles();
    
         listPumps = new DefaultListModel();
-
+/*
         jTextField_name.setEditable(false);
         jTextField_name.setText("");
 
@@ -161,7 +230,7 @@ public class MainPanel extends javax.swing.JPanel {
         jLabel_length.setText("Length (min):");
 
         jTextField_length.setEditable(false);
-        jTextField_length.setText("");
+        jTextField_length.setText("");*/
 
         jList_pumps.setModel(listPumps);
      /*   jList_pumps.addMouseListener( new MouseAdapter()
@@ -232,32 +301,16 @@ public class MainPanel extends javax.swing.JPanel {
         jPanel_programsLayout.setHorizontalGroup(
             jPanel_programsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_programsLayout.createSequentialGroup()
-                .addGroup(jPanel_programsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel_programsLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel_programsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton_newprofile, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton_modifyprofile, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(jPanel_programsLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton_addprofile)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addGroup(jPanel_programsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton_newprofile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton_modifyprofile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton_addprofile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
                 .addComponent(jSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel_programsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel_programsLayout.createSequentialGroup()
-                        .addGroup(jPanel_programsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel_length)
-                            .addComponent(jLabel_number))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel_programsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField_length, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField_number, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jTextField_name, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -267,16 +320,6 @@ public class MainPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel_programsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel_programsLayout.createSequentialGroup()
-                        .addComponent(jTextField_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel_programsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel_number)
-                            .addComponent(jTextField_number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel_programsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel_length)
-                            .addComponent(jTextField_length, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel_programsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(jPanel_programsLayout.createSequentialGroup()
                             .addComponent(jButton_newprofile)
@@ -403,8 +446,6 @@ public class MainPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton_newprofile;
     private javax.swing.JButton jButton_start;
     private javax.swing.JButton jButton_stop;
-    private javax.swing.JLabel jLabel_length;
-    private javax.swing.JLabel jLabel_number;
     private javax.swing.JList jList_profile;
     private javax.swing.JList jList_pumps;
     private javax.swing.JPanel jPanel_controls;
@@ -413,11 +454,14 @@ public class MainPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator;
-    private javax.swing.JTextField jTextField_length;
     private javax.swing.JTextField jTextField_name;
     private javax.swing.JTextField jTextField_number;
-    private javax.swing.JToggleButton jToggleButton_pause;
-    private javax.swing.JToggleButton jToggleButton_resume;
+    private javax.swing.JPanel jPanel_empty1;
+    private javax.swing.JPanel jPanel_empty2;
+    private javax.swing.JPanel jPanel_empty3;
+    private javax.swing.JPanel jPanel_empty4;
+    private javax.swing.JPanel jPanel_empty5;
+    private javax.swing.JPanel jPanel_empty6;
     
     private DefaultListModel listprofileAvailable;
     private DefaultListModel listPumps;

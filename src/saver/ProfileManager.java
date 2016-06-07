@@ -29,10 +29,12 @@ public class ProfileManager {
 		        return name.toLowerCase().endsWith(".piuprofile");
 		    }
 		});	
-		System.out.println("found "+files.length+" profiles");
-		for(int i=0;i<files.length;i++){
-			System.out.println("read "+files[i].getName());
-			readProfile(files[i].getPath());
+		if(files != null){
+			System.out.println("found "+files.length+" profiles");
+			for(int i=0;i<files.length;i++){
+				System.out.println("read "+files[i].getName());
+				readProfile(files[i].getPath());
+			}
 		}
 	}
 	
