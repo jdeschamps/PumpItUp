@@ -366,12 +366,13 @@ public class MainPanel extends javax.swing.JPanel {
 	    		}
 	    	}
 	    	
-	    	m++;
+	    	m=m+2;
 	    	String[][] data = new String[m][npumps+1];
 	    	for(int i=1;i<=npumps;i++){
 	    		Pump pu = p.getPump(i-1);
 	    		data[0][i] = String.valueOf(pu.getAddress());
-	    		for(int j=1;j<m;j++){
+	    		data[1][i] = String.valueOf(pu.getDiameter());
+	    		for(int j=2;j<m;j++){
 	    			if(pu.hasPhase(j-1)){
 	    				data[j][i] = "FUN "+pu.getPhase(j-1).getFunction()+" "+pu.getPhase(j-1).getParameter()+"\n";
 	    				if(pu.getPhase(j-1).getNumberInstructions()>0){
@@ -386,7 +387,8 @@ public class MainPanel extends javax.swing.JPanel {
 	    		}
 	    	}
 	    	data[0][0] = "Address";
-	    	for(int j=1;j<m;j++){
+	    	data[1][0] = "Diameter (mm)";
+	    	for(int j=2;j<m;j++){
 	    		data[j][0] = "Phase"+j;
 	    	}
 	    	System.out.println("Set new table model");
