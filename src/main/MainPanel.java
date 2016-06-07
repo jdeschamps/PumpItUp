@@ -294,7 +294,10 @@ public class MainPanel extends javax.swing.JPanel {
             	loadProfile();
             }
         });
-        
+
+        jButton_newprofile.setToolTipText("New profile");
+        jButton_modifyprofile.setToolTipText("Modify existing profile");
+        jButton_addprofile.setToolTipText("Add existing profile");
 
         javax.swing.GroupLayout jPanel_programsLayout = new javax.swing.GroupLayout(jPanel_profile);
         jPanel_profile.setLayout(jPanel_programsLayout);

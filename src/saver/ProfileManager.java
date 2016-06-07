@@ -24,6 +24,15 @@ public class ProfileManager {
 	
 	public void searchProfiles(){
 		File dir = new File(System.getProperty("user.dir")+"/PIU_profiles");
+		
+		if (!dir.isDirectory()) {
+			try{
+		        dir.mkdir();
+		    } catch(SecurityException se){
+		    	// to be written
+		    }   
+		}
+		
 		File[] files = dir.listFiles(new FilenameFilter() {
 		    public boolean accept(File dir, String name) {
 		        return name.toLowerCase().endsWith(".piuprofile");
